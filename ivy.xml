@@ -1,0 +1,9 @@
+<ivy-module version="2.0">
+    <info organisation="com.memoir" module="estimator"/>
+    <dependencies>
+        <dependency org="org.apache.poi"        name="poi-ooxml"             rev="3.8"                        >
+            <exclude name="xml-apis" />
+            <exclude name="commons-codec" />
+        </dependency>
+    </dependencies>
+</ivy-module>

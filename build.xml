@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<project name="ExcelCompare" default="build" basedir="." xmlns:ivy="antlib:org.apache.ivy.ant">
+
+    <target name="load-props">
+        <loadproperties srcfile="cfg/build.properties" />
+    </target>
+    
+	<target name="init" depends="load-props">
+		<mkdir dir="${class.dir}" />
+	    <mkdir dir="${installer.staging}"/>
+	</target>
+    
+    <target name="resolve-classpath" depends="init">
+        <!-- these will be packaged in fat-jar !-->
+        <fileset id="libs.classpath.fileset" dir="${lib.dir}">
+            <patternset includes="**/jar/*.jar"/>
+        </fileset>
+
+        <!-- classpath for compilation -->
+        <path id="lib.classpath">
+            <fileset refid="libs.classpath.fileset" />
+        </path>
+
+        <property name="jar.name" value="${project.name}-${full.version}.jar"/>        
+    </target>
+
+	<!-- compile -->
+	<target name="compile" depends="resolve-classpath">
+	    <!-- compile -->
+		<javac includeantruntime="false" srcdir="${src.dir}" destdir="${class.dir}"
+			debug="true" debuglevel="lines,vars,source" fork="true">
+		    <compilerarg line="-J-Xmx4g" />
+			<classpath refid="lib.classpath" />
+			<classpath>
+				<pathelement location="${cfg.dir}" />
+			</classpath>
+		</javac>
+	    <!-- copy other resources -->
+	    <copy todir="${class.dir}">
+	        <fileset dir="${src.dir}">
+	            <include name="**/*.txt" />
+	            <include name="**/*.tokens" />
+	            <include name="**/*.list" />
+	            <include name="**/*.xls*" />
+	        </fileset>
+	    </copy>
+	</target>
+				
+    <!-- test-compile -->
+    <target name="test-compile" depends="resolve-classpath">
+        <javac includeantruntime="false" srcdir="${test.dir}" destdir="${class.dir}"
+            debug="true" debuglevel="lines,vars,source" fork="true">
+            <compilerarg line="-J-Xmx4g" />
+            <classpath refid="lib.classpath" />
+            <classpath>
+                <pathelement location="${testcfg.dir}" />
+            </classpath>
+        </javac>
+        <copy todir="${class.dir}">
+            <fileset dir="${test.dir}">
+                <include name="**/*.txt" />
+                <include name="**/*.tokens" />
+                <include name="**/*.list" />
+                <include name="**/*.xls*" />
+            </fileset>
+        </copy>
+    </target>
+    
+	<!-- tests go here -->
+	<target name="test" depends="compile, test-compile">
+		<java classname="${test.mainclass}" fork="true" failonerror="true">
+			<jvmarg value="-Xmx4g" />
+			<classpath refid="lib.classpath" />
+			<classpath>
+				<pathelement location="${class.dir}" />
+				<pathelement location="${testcfg.dir}" />
+			</classpath>
+		</java>
+	</target>
+
+	<!-- create .jar -->
+	<target name="jar" depends="compile">
+		<jar jarfile="${basedir}/${installer.staging}/bin/dist/${jar.name}" basedir="${class.dir}">
+			<fileset dir="${cfg.dir}">
+				<include name="*" />
+				<exclude name="test" />
+			</fileset>
+			<manifest>
+				<attribute name="VERSION" value="${full.version}" />
+				<!-- attribute name="SVN-Revision" value="${svnversion}" / -->
+				<attribute name="Main-Class" value="${mainclass}" />
+			</manifest>
+		</jar>
+	</target>
+
+    <target name="build" depends="jar, copy-jars, write-binaries"/>
+    	
+	<target name="write-binaries" depends="load-props">
+    	<copy file="${basedir}/scripts/${binary_name}" tofile="${installer.staging}/bin/${binary_name}" />
+    	<chmod file="${installer.staging}/bin/${binary_name}" perm="+x"/>
+    	<copy file="${basedir}/scripts/${binary_name}.bat" tofile="${installer.staging}/bin/${binary_name}.bat" />
+	</target>
+	
+	<target name="copy-jars" depends="load-props">
+		<copy todir="${basedir}/${installer.staging}/bin/dist" flatten="true">
+			<fileset refid="libs.classpath.fileset" />
+    	</copy>   
+	</target>
+	
+	<!-- removes all that has been built -->
+	<target name="clean" depends="load-props">
+	    <delete dir="${installer.staging}" includeEmptyDirs="true"/>
+		<delete dir="${class.dir}" includeEmptyDirs="true" />
+	</target>
+
+    <!-- ========================= Ivy stuff ========================= -->
+    
+    <target name="ivy-init" depends="init">
+        <!-- try to load ivy here from local ivy dir, in case the user has not already dropped
+              it into ant's lib dir (note that the latter copy will always take precedence).
+              We will not fail as long as local lib dir exists (it may be empty) and
+              ivy is in at least one of ant's lib dir or the local lib dir. -->
+        <property name="ivy.jar.dir" value="ivy" />
+        <path id="ivy.lib.path">
+            <fileset dir="${ivy.jar.dir}" includes="*.jar"/>
+        </path>
+        <taskdef resource="org/apache/ivy/ant/antlib.xml"
+                 uri="antlib:org.apache.ivy.ant" classpathref="ivy.lib.path"/>
+    </target>
+    
+    <target name="deps" depends="ivy-init">
+        <ivy:retrieve pattern="${lib.dir}/ivy/[type]/[artifact]-[revision].[ext]" sync="true"/>
+        <ivy:report todir="${lib.dir}/ivy"/>
+    </target>
+    
+    <target name="clean-deps" depends="ivy-init">
+        <delete includeemptydirs="true">
+            <fileset dir="${lib.dir}/ivy" defaultexcludes="true"/>
+        </delete>
+    </target>
+    
+    <target name="clean-ivy-cache" depends="ivy-init" description="--> clean the ivy cache">
+        <ivy:cleancache />
+    </target>
+    
+</project>
+

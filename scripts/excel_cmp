@@ -1,0 +1,6 @@
+if [ -L $0 ];then
+dir=`readlink -f $0|xargs dirname`
+else
+dir=`dirname $0`
+fi
+java -ea -Xmx512m -cp "$dir/dist/*" com.ka.util.ExcelCompare "$@"
