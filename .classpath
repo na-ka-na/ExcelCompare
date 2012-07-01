@@ -1,13 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
 	<classpathentry kind="src" path="src"/>
-	<classpathentry kind="lib" path="install_stage/bin/dist/dom4j-1.6.1.jar"/>
-	<classpathentry kind="lib" path="install_stage/bin/dist/ExcelCompare-0.1.jar"/>
-	<classpathentry kind="lib" path="install_stage/bin/dist/poi-3.8.jar"/>
-	<classpathentry kind="lib" path="install_stage/bin/dist/poi-ooxml-3.8.jar"/>
-	<classpathentry kind="lib" path="install_stage/bin/dist/poi-ooxml-schemas-3.8.jar"/>
-	<classpathentry kind="lib" path="install_stage/bin/dist/stax-api-1.0.1.jar"/>
-	<classpathentry kind="lib" path="install_stage/bin/dist/xmlbeans-2.3.0.jar"/>
 	<classpathentry exported="true" kind="lib" path="lib/ivy/jar/dom4j-1.6.1.jar"/>
 	<classpathentry exported="true" kind="lib" path="lib/ivy/jar/poi-3.8.jar"/>
 	<classpathentry exported="true" kind="lib" path="lib/ivy/jar/poi-ooxml-3.8.jar"/>
