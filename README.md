@@ -11,7 +11,7 @@ This software is distributed under the [MIT](http://www.opensource.org/licenses/
 * Identifies extra cells / sheets in addition to common cells.
 * Prints all diffs & extra cells on stdout.
 * Process exits with 0 if workbooks match, 1 otherwise.
-* Works with both xls, xlsx. You may compare an xls with xlsx too.
+* Works with xls, xlsx, xlsm. You may compare an xls with xlsx too.
 * Compares only cell "contents". Formatting, macros are currently ignored.
 * Using --ignore1 & --ignore2 (both optional) you may tell the diff to skip any number of sheets / rows / columns / cells.
 
