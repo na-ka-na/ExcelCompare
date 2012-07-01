@@ -94,7 +94,7 @@
 		</jar>
 	</target>
 
-    <target name="build" depends="jar, copy-jars, write-binaries"/>
+    <target name="build" depends="jar, copy-jars, copy-readme, copy-legal, write-binaries"/>
     	
 	<target name="write-binaries" depends="load-props">
     	<copy file="${basedir}/scripts/${binary_name}" tofile="${installer.staging}/bin/${binary_name}" />
@@ -107,7 +107,19 @@
 			<fileset refid="libs.classpath.fileset" />
     	</copy>   
 	</target>
-	
+
+    <target name="copy-legal" depends="load-props">
+        <copy todir="${basedir}/${installer.staging}/legal" flatten="false">
+            <fileset dir="${legal.dir}" />
+        </copy>   
+    </target>
+    
+    <target name="copy-readme" depends="load-props">
+        <copy todir="${basedir}/${installer.staging}" flatten="true">
+            <fileset file="${readme.file}" />
+        </copy>   
+    </target>
+    
 	<!-- removes all that has been built -->
 	<target name="clean" depends="load-props">
 	    <delete dir="${installer.staging}" includeEmptyDirs="true"/>
