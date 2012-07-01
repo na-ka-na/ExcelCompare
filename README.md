@@ -2,6 +2,10 @@
 
 ExcelCompare is a command line tool (coming soon API) to diff Excel files.
 
+It uses the [Apache POI](http://poi.apache.org) library to read Excel files.
+
+This software is distributed under the [MIT](http://www.opensource.org/licenses/MIT) license.
+
 ## Features / Limitations
 
 * Identifies extra cells / sheets in addition to common cells.
