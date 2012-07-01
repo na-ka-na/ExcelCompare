@@ -1,10 +1,10 @@
-Introduction
-============
+# Introduction
 
 ExcelCompare is a command line tool (coming soon API) to diff Excel files.
 
-Features / Limitations
-======================
+------------------------------------
+
+# Features / Limitations
 
 * Identifies extra cells / sheets in addition to common cells.
 * Prints all diffs & extra cells on stdout.
@@ -15,11 +15,11 @@ Features / Limitations
 
 Report bugs / issues / requests [here](https://github.com/na-ka-na/ExcelCompare/issues)
 
-Installation
-============
+------------------------------------
 
-Prerequisites
--------------
+# Installation
+
+## Prerequisites
 
 * Requires Java 1.5 or higher.
 * Assumes Java is added to PATH (to check open a cmd and run java -version)
@@ -30,9 +30,9 @@ Just [download](https://github.com/na-ka-na/ExcelCompare/downloads) the zip file
 
 Extract it anywhere (and optionally you add the bin folder to PATH).
 
+------------------------------------
 
-Usage
-=====
+# Usage
 
     $ excel_cmp <file1> <file2> [--ignore1 <sheet-ignore-spec> ..] [--ignore2 <sheet-ignore-spec> ..]
 
@@ -42,8 +42,7 @@ Notes:
 * Give one and only one &lt;sheet-ignore-spec> per sheet
 * File path is assumed relative to current directory unless full path is provided
 
-Sheet Ignore Spec
------------------
+## Sheet Ignore Spec
     <sheet-name>:<row-ignore-spec>:<column-ignore-spec>:<cell-ignore-spec>
     
 * Everything except &lt;sheet-name> is optional
@@ -51,31 +50,27 @@ Sheet Ignore Spec
 * Any cell satisfying any ignore spec in the sheet (row, col, or cell) will be ignored in diff
 * You may provide only &lt;cell-ignore-spec> as - &lt;sheet-name>:::&lt;cell-ignore-spec>
 
-Row Ignore Spec
----------------
+## Row Ignore Spec
     <comma sep list of row or row-range>
 
 * Row numbers begin from 1
 * Range of rows may be provide as: 1-10
 * Rows and ranges may be mixed as: 1-10,12,20-30 etc.
 
-Column Ignore Spec
-------------------
+## Column Ignore Spec
     <comma sep list of column or column-range>
 
 * Similar to Row Ignore Spec
 * Columns are letters starting with A
 
-Cell Ignore Spec
-----------------
+## Cell Ignore Spec
     <comma sep list of cell or cell-range>
 
 * Similar to Row Ignore Spec
 * Cells are in usual Excel notation A1 D10
 * Range may be provided as A1-D10
 
-Examples
---------
+## Examples
 
 * Diff all cells
 
@@ -109,3 +104,4 @@ Examples
 
         excel_cmp 1.xlsx 2.xlsx --ignore1 Sheet2:::A1-B10 --ignore2 Sheet2:::A1-B10
         
+------------------------------------
