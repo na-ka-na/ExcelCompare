@@ -57,9 +57,6 @@ public class ExcelCompare {
      */
     
     public static void main(String[] args) throws Exception{
-        args = new String[]{"ampster0.xlsm","ampster1.xlsm"
-        ,"--ignore1", "audit"
-        ,"--ignore2", "audit"};
         if ((args.length < 2)){
             System.out.println(usage());
             return;
