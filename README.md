@@ -101,4 +101,99 @@ Notes:
 * Ignore cells A1-B10 in Sheet2 of both files
 
         excel_cmp 1.xlsx 2.xlsx --ignore1 Sheet2:::A1-B10 --ignore2 Sheet2:::A1-B10
-        
+
+
+## Output format
+* Each diff or extra cell is reported per line as follows
+
+        DIFF  Cell at      <Cell> => <Value1> v/s <Value2>
+        EXTRA Cell in <WB> <Cell> => <Value>
+
+* Then a summary
+
+        ----------------- DIFF -------------------
+        Sheets: [<Set of sheets with diffs>]
+        Rows: [<Set of rows with diffs>]
+        Cols: [<Set of columns with diffs>]
+        ----------------- EXTRA WB1 -------------------
+        Sheets: [<Set of extra sheets in WB1>]
+        Rows: [<Set of extra rows in WB1>]
+        Cols: [<Set of extra columns in WB1>]
+        ----------------- EXTRA WB2 -------------------
+        Sheets: [<Set of extra sheets in WB2>]
+        Rows: [<Set of extra rows in WB2>]
+        Cols: [<Set of extra columns in WB2>]
+        -----------------------------------------
+
+* Then one line
+
+        Excel files <file1> and <file2> differ|match
+
+### Examples
+
+* Diffs in cells and extra cells
+<pre>
+> excel_cmp xxx.xlsx yyy.xlsx
+DIFF  Cell at     Sheet1!A1 => 'a' v/s 'aa'
+EXTRA Cell in WB1 Sheet1!B1 => 'cc'
+DIFF  Cell at     Sheet1!D4 => '4.0' v/s '14.0'
+EXTRA Cell in WB2 Sheet1!J10 => 'j'
+EXTRA Cell in WB1 Sheet1!K11 => 'k'
+EXTRA Cell in WB1 Sheet2!A1 => 'abc'
+EXTRA Cell in WB2 Sheet3!A1 => 'haha'
+----------------- DIFF -------------------
+Sheets: [Sheet1]
+Rows: [1, 4]
+Cols: [A, D]
+----------------- EXTRA WB1 -------------------
+Sheets: [Sheet1, Sheet2]
+Rows: [1, 11]
+Cols: [B, K, A]
+----------------- EXTRA WB2 -------------------
+Sheets: [Sheet1, Sheet3]
+Rows: [10, 1]
+Cols: [J, A]
+-----------------------------------------
+Excel files xxx.xlsx and yyy.xlsx differ
+</pre>
+
+* Only extra cells
+<pre>
+excel_cmp xxx.xlsx yyy.xlsx --ignore1 Sheet1 --ignore2 Sheet1
+EXTRA Cell in WB1 Sheet2!A1 => 'abc'
+EXTRA Cell in WB2 Sheet3!A1 => 'haha'
+----------------- DIFF -------------------
+Sheets: []
+Rows: []
+Cols: []
+----------------- EXTRA WB1 -------------------
+Sheets: [Sheet2]
+Rows: [1]
+Cols: [A]
+----------------- EXTRA WB2 -------------------
+Sheets: [Sheet3]
+Rows: [1]
+Cols: [A]
+-----------------------------------------
+Excel files xxx.xlsx and yyy.xlsx differ
+</pre>
+
+
+* No diff
+<pre>
+excel_cmp xxx.xlsx yyy.xlsx --ignore1 Sheet1 Sheet2 Sheet3 --ignore2 Sheet1 Sheet2 Sheet3
+----------------- DIFF -------------------
+Sheets: []
+Rows: []
+Cols: []
+----------------- EXTRA WB1 -------------------
+Sheets: []
+Rows: []
+Cols: []
+----------------- EXTRA WB2 -------------------
+Sheets: []
+Rows: []
+Cols: []
+-----------------------------------------
+Excel files xxx.xlsx and yyy.xlsx match
+</pre>
