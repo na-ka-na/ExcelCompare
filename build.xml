@@ -6,10 +6,10 @@
         <loadproperties srcfile="cfg/build.properties" />
     </target>
     
-	<target name="init" depends="load-props">
-		<mkdir dir="${class.dir}" />
-	    <mkdir dir="${installer.staging}"/>
-	</target>
+    <target name="init" depends="load-props">
+        <mkdir dir="${class.dir}" />
+        <mkdir dir="${installer.staging}"/>
+    </target>
     
     <target name="resolve-classpath" depends="init">
         <!-- these will be packaged in fat-jar !-->
@@ -25,28 +25,28 @@
         <property name="jar.name" value="${project.name}-${full.version}.jar"/>        
     </target>
 
-	<!-- compile -->
-	<target name="compile" depends="resolve-classpath">
-	    <!-- compile -->
-		<javac includeantruntime="false" srcdir="${src.dir}" destdir="${class.dir}"
-			debug="true" debuglevel="lines,vars,source" fork="true">
-		    <compilerarg line="-J-Xmx4g" />
-			<classpath refid="lib.classpath" />
-			<classpath>
-				<pathelement location="${cfg.dir}" />
-			</classpath>
-		</javac>
-	    <!-- copy other resources -->
-	    <copy todir="${class.dir}">
-	        <fileset dir="${src.dir}">
-	            <include name="**/*.txt" />
-	            <include name="**/*.tokens" />
-	            <include name="**/*.list" />
-	            <include name="**/*.xls*" />
-	        </fileset>
-	    </copy>
-	</target>
-				
+    <!-- compile -->
+    <target name="compile" depends="resolve-classpath">
+        <!-- compile -->
+        <javac includeantruntime="false" srcdir="${src.dir}" destdir="${class.dir}"
+            debug="true" debuglevel="lines,vars,source" fork="true">
+            <compilerarg line="-J-Xmx4g" />
+            <classpath refid="lib.classpath" />
+            <classpath>
+                <pathelement location="${cfg.dir}" />
+            </classpath>
+        </javac>
+        <!-- copy other resources -->
+        <copy todir="${class.dir}">
+            <fileset dir="${src.dir}">
+                <include name="**/*.txt" />
+                <include name="**/*.tokens" />
+                <include name="**/*.list" />
+                <include name="**/*.xls*" />
+            </fileset>
+        </copy>
+    </target>
+                
     <!-- test-compile -->
     <target name="test-compile" depends="resolve-classpath">
         <javac includeantruntime="false" srcdir="${test.dir}" destdir="${class.dir}"
@@ -67,46 +67,46 @@
         </copy>
     </target>
     
-	<!-- tests go here -->
-	<target name="test" depends="compile, test-compile">
-		<java classname="${test.mainclass}" fork="true" failonerror="true">
-			<jvmarg value="-Xmx4g" />
-			<classpath refid="lib.classpath" />
-			<classpath>
-				<pathelement location="${class.dir}" />
-				<pathelement location="${testcfg.dir}" />
-			</classpath>
-		</java>
-	</target>
+    <!-- tests go here -->
+    <target name="test" depends="compile, test-compile">
+        <java classname="${test.mainclass}" fork="true" failonerror="true">
+            <jvmarg value="-Xmx4g" />
+            <classpath refid="lib.classpath" />
+            <classpath>
+                <pathelement location="${class.dir}" />
+                <pathelement location="${testcfg.dir}" />
+            </classpath>
+        </java>
+    </target>
 
-	<!-- create .jar -->
-	<target name="jar" depends="compile">
-		<jar jarfile="${basedir}/${installer.staging}/bin/dist/${jar.name}" basedir="${class.dir}">
-			<fileset dir="${cfg.dir}">
-				<include name="*" />
-				<exclude name="test" />
-			</fileset>
-			<manifest>
-				<attribute name="VERSION" value="${full.version}" />
-				<!-- attribute name="SVN-Revision" value="${svnversion}" / -->
-				<attribute name="Main-Class" value="${mainclass}" />
-			</manifest>
-		</jar>
-	</target>
+    <!-- create .jar -->
+    <target name="jar" depends="compile">
+        <jar jarfile="${basedir}/${installer.staging}/bin/dist/${jar.name}" basedir="${class.dir}">
+            <fileset dir="${cfg.dir}">
+                <include name="*" />
+                <exclude name="test" />
+            </fileset>
+            <manifest>
+                <attribute name="VERSION" value="${full.version}" />
+                <!-- attribute name="SVN-Revision" value="${svnversion}" / -->
+                <attribute name="Main-Class" value="${mainclass}" />
+            </manifest>
+        </jar>
+    </target>
 
     <target name="build" depends="jar, copy-jars, copy-readme, copy-legal, write-binaries"/>
-    	
-	<target name="write-binaries" depends="load-props">
-    	<copy file="${basedir}/scripts/${binary_name}" tofile="${installer.staging}/bin/${binary_name}" />
-    	<chmod file="${installer.staging}/bin/${binary_name}" perm="+x"/>
-    	<copy file="${basedir}/scripts/${binary_name}.bat" tofile="${installer.staging}/bin/${binary_name}.bat" />
-	</target>
-	
-	<target name="copy-jars" depends="load-props">
-		<copy todir="${basedir}/${installer.staging}/bin/dist" flatten="true">
-			<fileset refid="libs.classpath.fileset" />
-    	</copy>   
-	</target>
+        
+    <target name="write-binaries" depends="load-props">
+        <copy file="${basedir}/scripts/${binary_name}" tofile="${installer.staging}/bin/${binary_name}" />
+        <chmod file="${installer.staging}/bin/${binary_name}" perm="+x"/>
+        <copy file="${basedir}/scripts/${binary_name}.bat" tofile="${installer.staging}/bin/${binary_name}.bat" />
+    </target>
+    
+    <target name="copy-jars" depends="load-props">
+        <copy todir="${basedir}/${installer.staging}/bin/dist" flatten="true">
+            <fileset refid="libs.classpath.fileset" />
+        </copy>   
+    </target>
 
     <target name="copy-legal" depends="load-props">
         <copy todir="${basedir}/${installer.staging}/legal" flatten="false">
@@ -120,11 +120,11 @@
         </copy>   
     </target>
     
-	<!-- removes all that has been built -->
-	<target name="clean" depends="load-props">
-	    <delete dir="${installer.staging}" includeEmptyDirs="true"/>
-		<delete dir="${class.dir}" includeEmptyDirs="true" />
-	</target>
+    <!-- removes all that has been built -->
+    <target name="clean" depends="load-props">
+        <delete dir="${installer.staging}" includeEmptyDirs="true"/>
+        <delete dir="${class.dir}" includeEmptyDirs="true" />
+    </target>
 
     <!-- ========================= Ivy stuff ========================= -->
     
