@@ -2,12 +2,11 @@
 <classpath>
 	<classpathentry kind="src" path="src"/>
 	<classpathentry exported="true" kind="lib" path="lib/ivy/jar/dom4j-1.6.1.jar"/>
-	<classpathentry exported="true" kind="lib" path="lib/ivy/jar/poi-3.8.jar"/>
-	<classpathentry exported="true" kind="lib" path="lib/ivy/jar/poi-ooxml-3.8.jar"/>
-	<classpathentry exported="true" kind="lib" path="lib/ivy/jar/poi-ooxml-schemas-3.8.jar"/>
 	<classpathentry exported="true" kind="lib" path="lib/ivy/jar/stax-api-1.0.1.jar"/>
 	<classpathentry exported="true" kind="lib" path="lib/ivy/jar/xmlbeans-2.3.0.jar"/>
-	<classpathentry kind="lib" path="lib/ivy/source/poi-ooxml-3.8.jar"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry kind="lib" path="lib/ivy/jar/poi-3.9.jar"/>
+	<classpathentry kind="lib" path="lib/ivy/jar/poi-ooxml-3.9.jar" sourcepath="lib/ivy/source/poi-ooxml-3.9.jar"/>
+	<classpathentry kind="lib" path="lib/ivy/jar/poi-ooxml-schemas-3.9.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
