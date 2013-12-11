@@ -1,14 +1,10 @@
 package com.ka.excelcmp;
 import java.io.File;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.LinkedHashSet;
 import java.util.Map;
 import java.util.Set;
 
-import org.apache.poi.ss.usermodel.Cell;
-import org.apache.poi.ss.usermodel.Row;
-import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.ss.usermodel.WorkbookFactory;
 
@@ -66,12 +62,14 @@ public class ExcelCompare {
         
         Workbook wb1 = WorkbookFactory.create(file1);
         Workbook wb2 = WorkbookFactory.create(file2);
+        SpreadSheetExcel sse1 = new SpreadSheetExcel(wb1);
+        SpreadSheetExcel sse2 = new SpreadSheetExcel(wb2);
         
         Map<String,SheetIgnores> sheetIgnores1 = parseSheetIgnores(args, "--ignore1");
         Map<String,SheetIgnores> sheetIgnores2 = parseSheetIgnores(args, "--ignore2");
 
-        WorkbookIterator wi1 = new WorkbookIterator(wb1, sheetIgnores1);
-        WorkbookIterator wi2 = new WorkbookIterator(wb2, sheetIgnores2);
+        SpreadSheetIterator wi1 = new SpreadSheetIterator(sse1, sheetIgnores1);
+        SpreadSheetIterator wi2 = new SpreadSheetIterator(sse2, sheetIgnores2);
         
         DiffReportCallback call = new DiffReportCallback() {
             Set<Object> sheets = new LinkedHashSet<Object>();
@@ -89,24 +87,30 @@ public class ExcelCompare {
             @Override
             public void reportWorkbooksDiffer(boolean differ) {
                 reportSummary();
-                System.out.println("Excel files " + file1 +" and " + file2 +" " + (differ ? "differ" : "match"));
+                System.out.println("Excel files " + file1 + " and " + file2 + " " + (differ ? "differ" : "match"));
             }
             
             @Override
             public void reportExtraCell(boolean firstWb, CellPos c) {
                 if (firstWb){
-                    sheets1.add(c.sheet()); rows1.add(c.row()); cols1.add(c.col());
+                    sheets1.add(c.getSheetName());
+                    rows1.add(c.getRow());
+                    cols1.add(c.getColumn());
                 } else {
-                    sheets2.add(c.sheet()); rows2.add(c.row()); cols2.add(c.col());
+                    sheets2.add(c.getSheetName());
+                    rows2.add(c.getRow());
+                    cols2.add(c.getColumn());
                 }
                 String wb = firstWb ? "WB1" : "WB2";
-                System.out.println("EXTRA Cell in " + wb + " " + c.cellPos() +" => '" + c.value() + "'");
+                System.out.println("EXTRA Cell in " + wb + " " + c.getCellPosition() +" => '" + c.getStringValue() + "'");
             }
             
             @Override
             public void reportDiffCell(CellPos c1, CellPos c2) {
-                sheets.add(c1.sheet()); rows.add(c1.row()); cols.add(c1.col());
-                System.out.println("DIFF  Cell at     " + c1.cellPos()+" => '"+ c1.value() +"' v/s '" + c2.value() + "'");
+                sheets.add(c1.getSheetName());
+                rows.add(c1.getRow());
+                cols.add(c1.getColumn());
+                System.out.println("DIFF  Cell at     " + c1.getCellPosition()+" => '"+ c1.getStringValue() +"' v/s '" + c2.getStringValue() + "'");
             }
             
             private void reportSummary(){
@@ -116,7 +120,8 @@ public class ExcelCompare {
                 System.out.println("-----------------------------------------");
             }
             
-            private void reportS(String what, Set<Object> sheets, Set<Object> rows, Set<Object> cols){
+            @SuppressWarnings("hiding")
+            private void reportS(String what, Set<Object> sheets, Set<Object> rows, Set<Object> cols) {
                 System.out.println("----------------- "+what+" -------------------");
                 System.out.println("Sheets: " + sheets);
                 System.out.println("Rows: " + rows);
@@ -129,7 +134,7 @@ public class ExcelCompare {
         System.exit(differ ? 1 : 0);
     }
     
-    private static boolean doDiff(WorkbookIterator wi1, WorkbookIterator wi2, DiffReportCallback call){
+    private static boolean doDiff(SpreadSheetIterator wi1, SpreadSheetIterator wi2, DiffReportCallback call){
         boolean isDiff = false;
         CellPos c1 = null, c2 = null;
         while (true){
@@ -139,7 +144,7 @@ public class ExcelCompare {
             if ((c1!=null) && (c2!=null)){
                 int c = c1.compareTo(c2);
                 if (c == 0){
-                    if (!c1.value().equals(c2.value())){
+                    if (!c1.getStringValue().equals(c2.getStringValue())){
                         isDiff = true;
                         call.reportDiffCell(c1, c2);
                     }
@@ -207,79 +212,4 @@ public class ExcelCompare {
         }
         return ret;
     }
-
 }
-
-class WorkbookIterator{
-    Workbook wb;
-    Map<String,SheetIgnores> sheetIgnores;
-    int currSheetIdx;
-    SheetIgnores currSheetIgnores;
-    Iterator<Row> rows;
-    Iterator<Cell> cells;
-    
-    WorkbookIterator(Workbook wb, Map<String,SheetIgnores> sheetIgnores){
-        this.wb = wb;
-        this.sheetIgnores = sheetIgnores;
-        this.currSheetIdx = -1;
-        _seenNext = false;
-    }
-    
-    boolean _seenNext;
-    Cell _nextCell;
-    
-    boolean hasNext(){
-        if (!_seenNext){
-            _nextCell = null;
-            _seenNext = true;
-            while (_nextCell == null){
-                if ((cells != null) && (cells.hasNext())){
-                    Cell cell = cells.next();
-                    if (!ignoreCol(cell) && !ignoreCell(cell)){
-                        _nextCell = cell;
-                    }
-                }
-                else if ((rows != null) && (rows.hasNext())){
-                    Row row = rows.next();
-                    if (!ignoreRow(row)){
-                        cells = row.cellIterator();
-                    }
-                }
-                else if (currSheetIdx < (wb.getNumberOfSheets()-1)){
-                    currSheetIdx++;
-                    Sheet sheet = wb.getSheetAt(currSheetIdx);
-                    currSheetIgnores = sheetIgnores.get(wb.getSheetName(currSheetIdx));
-                    if (!ignoreSheet()){
-                        rows = sheet.rowIterator();
-                    }
-                }
-                else{
-                    break;
-                }
-            }
-        }
-        return _nextCell != null;
-    }
-
-    boolean ignoreSheet(){
-        return (currSheetIgnores!=null) && currSheetIgnores.isWholeSheetIgnored();
-    }
-    
-    boolean ignoreRow(Row row){
-        return (currSheetIgnores!=null) && (currSheetIgnores.isRowIgnored(row.getRowNum()));
-    }
-    
-    boolean ignoreCol(Cell cell){
-        return (currSheetIgnores!=null) && (currSheetIgnores.isColIgnored(cell.getColumnIndex()));
-    }
-    
-    boolean ignoreCell(Cell cell){
-        return (currSheetIgnores!=null) && (currSheetIgnores.isCellIgnored(cell.getRowIndex(), cell.getColumnIndex()));
-    }
-    
-    CellPos next(){
-        _seenNext = false;
-        return new CellPos(wb, currSheetIdx, _nextCell);
-    }
-}
-

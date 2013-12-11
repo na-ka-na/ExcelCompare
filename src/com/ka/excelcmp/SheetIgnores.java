@@ -3,22 +3,27 @@ package com.ka.excelcmp;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.ka.excelcmp.ExcelUtils.CELL_USER_TO_POI;
-import static com.ka.excelcmp.ExcelUtils.COL_USER_TO_POI;
-import static com.ka.excelcmp.ExcelUtils.ROW_USER_TO_POI;
+import static com.ka.excelcmp.SpreadSheetUtils.CELL_USER_TO_INTERNAL;
+import static com.ka.excelcmp.SpreadSheetUtils.COL_USER_TO_INTERNAL;
+import static com.ka.excelcmp.SpreadSheetUtils.ROW_USER_TO_INTERNAL;
 
-class SheetIgnores{
+public class SheetIgnores {
     
-    private static class Range{
-        final int[] low, high;
+    private static class Range {
+    	
+    	private final int[] low;
+        private final int[] high;
+        
         Range(int low, int high){
             this.low = new int[]{low};
             this.high = new int[]{high};
         }
+        
         Range(int low1, int low2, int high1, int high2){
             this.low = new int[]{low1, low2};
             this.high = new int[]{high1, high2};
         }
+        
         boolean lies_between(int ... x){
             for (int i=0; i<x.length; i++){
                 if (!((low[i] <= x[i]) && (x[i] <= high[i])))
@@ -37,27 +42,27 @@ class SheetIgnores{
     private List<Range> colIgnores;
     private List<Range> cellIgnores;
     
-    protected String sheetName(){
+    public String sheetName(){
         return sheetName;
     }
     
-    protected boolean isWholeSheetIgnored(){
+    public boolean isWholeSheetIgnored(){
         return completeIgnore;
     }
     
-    protected boolean isRowIgnored(int row){
+    public boolean isRowIgnored(int row){
         return rowIgnoresPresent && isIgnored(rowIgnores, row);
     }
     
-    protected boolean isColIgnored(int col){
+    public boolean isColIgnored(int col){
         return colIgnoresPresent && isIgnored(colIgnores, col);
     }
     
-    protected boolean isCellIgnored(int row, int col){
+    public boolean isCellIgnored(int row, int col){
         return cellIgnoresPresent && isIgnored(cellIgnores, row, col);
     }
     
-    protected boolean isIgnored(List<Range> rngs, int ... pt){
+    public boolean isIgnored(List<Range> rngs, int ... pt){
         for (Range r : rngs){
             if (r.lies_between(pt))
                 return true;
@@ -65,7 +70,7 @@ class SheetIgnores{
         return false;
     }
     
-    protected static SheetIgnores newSheetIgnore(String val){
+    public static SheetIgnores newSheetIgnore(String val){
         return new SheetIgnores().parse(val);
     }
     
@@ -97,11 +102,11 @@ class SheetIgnores{
             for (String rng : val.split(",")){
                 String[] rngs = rng.split("-");
                 if(rngs.length == 1){ // Single row
-                    int row = ROW_USER_TO_POI(Integer.parseInt(rngs[0]));
+                    int row = ROW_USER_TO_INTERNAL(Integer.parseInt(rngs[0]));
                     ret.add(new Range(row, row));
                 } else if (rngs.length == 2){
-                    int row1 = ROW_USER_TO_POI(Integer.parseInt(rngs[0]));
-                    int row2 = ROW_USER_TO_POI(Integer.parseInt(rngs[1]));
+                    int row1 = ROW_USER_TO_INTERNAL(Integer.parseInt(rngs[0]));
+                    int row2 = ROW_USER_TO_INTERNAL(Integer.parseInt(rngs[1]));
                     ret.add(new Range(row1, row2));
                 } else {
                     throw new IllegalArgumentException("Illegal row ignore specifier " + val);
@@ -117,11 +122,11 @@ class SheetIgnores{
             for (String rng : val.split(",")){
                 String[] rngs = rng.split("-");
                 if(rngs.length == 1){ // Single col
-                    int col = COL_USER_TO_POI(rngs[0]);
+                    int col = COL_USER_TO_INTERNAL(rngs[0]);
                     ret.add(new Range(col, col));
                 } else if (rngs.length == 2){
-                    int col1 = COL_USER_TO_POI(rngs[0]);
-                    int col2 = COL_USER_TO_POI(rngs[1]);
+                    int col1 = COL_USER_TO_INTERNAL(rngs[0]);
+                    int col2 = COL_USER_TO_INTERNAL(rngs[1]);
                     ret.add(new Range(col1, col2));
                 } else {
                     throw new IllegalArgumentException("Illegal col ignore specifier " + val);
@@ -137,11 +142,11 @@ class SheetIgnores{
             for (String rng : val.split(",")){
                 String[] rngs = rng.split("-");
                 if(rngs.length == 1){ // Single cell
-                    int[] rowcol = CELL_USER_TO_POI(rngs[0]);
+                    int[] rowcol = CELL_USER_TO_INTERNAL(rngs[0]);
                     ret.add(new Range(rowcol[0], rowcol[1], rowcol[0], rowcol[1]));
                 } else if (rngs.length == 2){
-                    int[] rowcol1 = CELL_USER_TO_POI(rngs[0]);
-                    int[] rowcol2 = CELL_USER_TO_POI(rngs[1]);
+                    int[] rowcol1 = CELL_USER_TO_INTERNAL(rngs[0]);
+                    int[] rowcol2 = CELL_USER_TO_INTERNAL(rngs[1]);
                     ret.add(new Range(rowcol1[0], rowcol1[1], rowcol2[0], rowcol2[1]));
                 } else {
                     throw new IllegalArgumentException("Illegal cell ignore specifier " + val);

@@ -1,50 +1,47 @@
 package com.ka.excelcmp;
 
-import org.apache.poi.ss.usermodel.Cell;
-import org.apache.poi.ss.usermodel.Workbook;
-
-import static com.ka.excelcmp.ExcelUtils.CELL_POI_TO_USER;
-import static com.ka.excelcmp.ExcelUtils.COL_POI_TO_USER;
-import static com.ka.excelcmp.ExcelUtils.ROW_POI_TO_USER;
-
+import static com.ka.excelcmp.SpreadSheetUtils.CELL_INTERNAL_TO_USER;
+import static com.ka.excelcmp.SpreadSheetUtils.COL_INTERNAL_TO_USER;
+import static com.ka.excelcmp.SpreadSheetUtils.ROW_INTERNAL_TO_USER;
 
 public class CellPos implements Comparable<CellPos>{
-    private final Workbook wb;
-    private final int sheetIdx;
-    private final Cell cell;
+	
+    private final ISheet sheet;
+    private final ICell cell;
     
-    public String sheet(){
-        return wb.getSheetName(sheetIdx);
-    }
-    public int row(){
-        return ROW_POI_TO_USER(cell.getRowIndex());
-    }
-    public String col(){
-        return COL_POI_TO_USER(cell.getColumnIndex());
-    }
-    
-    protected CellPos(Workbook wb, int sheetIdx, Cell cell){
-        this.wb = wb;
-        this.sheetIdx = sheetIdx;
+    public CellPos(ISheet sheet, ICell cell){
+        this.sheet = sheet;
         this.cell = cell;
     }
     
-    public String cellPos(){
-        return wb.getSheetName(sheetIdx)+"!"
-                +CELL_POI_TO_USER(cell.getRowIndex(), cell.getColumnIndex());
+    public String getSheetName(){
+        return sheet.getName();
     }
     
+    public int getRow(){
+        return ROW_INTERNAL_TO_USER(cell.getRowIndex());
+    }
+    
+    public String getColumn(){
+        return COL_INTERNAL_TO_USER(cell.getColumnIndex());
+    }
+    
+    public String getCellPosition(){
+        return getSheetName()+"!" + CELL_INTERNAL_TO_USER(cell.getRowIndex(), cell.getColumnIndex());
+    }
+    
+    public String getStringValue(){
+        return cell.getStringValue();
+    }
+    
+    @Override
     public String toString(){
-        return cellPos() +" => " + cell.toString();
-    }
-    
-    public Object value(){
-        return cell.toString();
+        return getCellPosition() +" => " + cell.toString();
     }
     
     @Override
     public int compareTo(CellPos o) {
-        int c = sheetIdx - o.sheetIdx;
+        int c = sheet.getSheetIndex() - o.sheet.getSheetIndex();
         if (c == 0){
             c = cell.getRowIndex() - o.cell.getRowIndex();
             if (c == 0){
