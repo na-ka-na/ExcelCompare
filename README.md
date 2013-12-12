@@ -1,8 +1,9 @@
 ## Introduction
 
-ExcelCompare is a command line tool (coming soon API) to diff Excel files.
+ExcelCompare is a command line tool (coming soon API) to diff Excel / Open document (ods) files.
 
 It uses the [Apache POI](http://poi.apache.org) library to read Excel files.
+And the [OdfToolkit] (http://incubator.apache.org/odftoolkit) library to read Open document (ods) files.
 
 This software is distributed under the [MIT](http://www.opensource.org/licenses/MIT) license.
 
@@ -11,7 +12,7 @@ This software is distributed under the [MIT](http://www.opensource.org/licenses/
 * Identifies extra cells / sheets in addition to common cells.
 * Prints all diffs & extra cells on stdout.
 * Process exits with 0 if workbooks match, 1 otherwise.
-* Works with xls, xlsx, xlsm. You may compare an xls with xlsx too.
+* Works with xls, xlsx, xlsm, ods. You may compare any of these with each other.
 * Compares only cell "contents". Formatting, macros are currently ignored.
 * Using --ignore1 & --ignore2 (both optional) you may tell the diff to skip any number of sheets / rows / columns / cells.
 
@@ -21,7 +22,7 @@ Report bugs / issues / requests [here](https://github.com/na-ka-na/ExcelCompare/
 
 ### Prerequisites
 
-* Requires Java 1.5 or higher.
+* Requires Java 1.6 or higher.
 * Assumes Java is added to PATH (to check open a cmd and run java -version)
 * No other platform specific requirements
 * A shell script and a bat script are packaged
