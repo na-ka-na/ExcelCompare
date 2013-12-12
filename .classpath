@@ -18,5 +18,6 @@
 	<classpathentry kind="lib" path="lib/ivy/jar/taglets-0.8.8-incubating.jar"/>
 	<classpathentry kind="lib" path="lib/ivy/jar/xercesImpl-2.9.1.jar"/>
 	<classpathentry kind="lib" path="lib/ivy/jar/xml-apis-1.3.04.jar"/>
+	<classpathentry kind="lib" path="lib/ivy/jar/jsr305-2.0.2.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

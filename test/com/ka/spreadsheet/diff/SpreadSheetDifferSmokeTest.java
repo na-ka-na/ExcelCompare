@@ -6,7 +6,7 @@ import static com.ka.spreadsheet.diff.TestUtils.verifyFileContentsSame;
 import java.io.File;
 import java.io.PrintStream;
 
-import com.sun.istack.internal.Nullable;
+import javax.annotation.Nullable;
 
 public class SpreadSheetDifferSmokeTest {
 	

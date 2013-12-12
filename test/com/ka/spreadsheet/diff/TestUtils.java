@@ -7,7 +7,7 @@ import java.io.IOException;
 import java.util.LinkedList;
 import java.util.Objects;
 
-import com.sun.istack.internal.Nullable;
+import javax.annotation.Nullable;
 
 public class TestUtils {
 
