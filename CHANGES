@@ -1,0 +1,12 @@
+Version 0.3 to 0.2
+-------------------
+
+1. Support Open document (.ods) files
+2. Add some smoke tests
+
+
+Version 0.2 to 0.1
+------------------
+
+1. Better output formatting and more details
+2. Breakup code into multiple files
