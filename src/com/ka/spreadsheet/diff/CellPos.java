@@ -1,8 +1,8 @@
-package com.ka.excelcmp;
+package com.ka.spreadsheet.diff;
 
-import static com.ka.excelcmp.SpreadSheetUtils.CELL_INTERNAL_TO_USER;
-import static com.ka.excelcmp.SpreadSheetUtils.COL_INTERNAL_TO_USER;
-import static com.ka.excelcmp.SpreadSheetUtils.ROW_INTERNAL_TO_USER;
+import static com.ka.spreadsheet.diff.SpreadSheetUtils.CELL_INTERNAL_TO_USER;
+import static com.ka.spreadsheet.diff.SpreadSheetUtils.COL_INTERNAL_TO_USER;
+import static com.ka.spreadsheet.diff.SpreadSheetUtils.ROW_INTERNAL_TO_USER;
 
 public class CellPos implements Comparable<CellPos>{
 	

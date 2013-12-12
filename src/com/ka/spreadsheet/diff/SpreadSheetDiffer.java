@@ -1,4 +1,4 @@
-package com.ka.excelcmp;
+package com.ka.spreadsheet.diff;
 import java.io.File;
 import java.util.HashMap;
 import java.util.LinkedHashSet;
@@ -7,6 +7,7 @@ import java.util.Set;
 
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.ss.usermodel.WorkbookFactory;
+import org.odftoolkit.simple.SpreadsheetDocument;
 
 
 public class SpreadSheetDiffer {
@@ -52,24 +53,36 @@ public class SpreadSheetDiffer {
      * TODO: Better display of results
      */
     
-    public static void main(String[] args) throws Exception{
+    public static void main(String[] args) {
+    	int ret = -1;
+    	try {
+    		ret = doMain(args);
+    	} catch (Exception e) {
+    		e.printStackTrace(System.err);
+    	}
+    	System.exit(ret);
+    }
+    
+    public static int doMain(String[] args) throws Exception {
         if ((args.length < 2)){
             System.out.println(usage());
-            return;
+            return -1;
         }
         final File file1 = new File(args[0]);
         final File file2 = new File(args[1]);
         
-        Workbook wb1 = WorkbookFactory.create(file1);
-        Workbook wb2 = WorkbookFactory.create(file2);
-        SpreadSheetExcel sse1 = new SpreadSheetExcel(wb1);
-        SpreadSheetExcel sse2 = new SpreadSheetExcel(wb2);
+        if (!verifyFile(file1) || !verifyFile(file2)) {
+        	return -1;
+        }
+        
+        ISpreadSheet ss1 = loadSpreadSheet(file1);
+        ISpreadSheet ss2 = loadSpreadSheet(file2);
         
         Map<String,SheetIgnores> sheetIgnores1 = parseSheetIgnores(args, "--ignore1");
         Map<String,SheetIgnores> sheetIgnores2 = parseSheetIgnores(args, "--ignore2");
 
-        SpreadSheetIterator wi1 = new SpreadSheetIterator(sse1, sheetIgnores1);
-        SpreadSheetIterator wi2 = new SpreadSheetIterator(sse2, sheetIgnores2);
+        SpreadSheetIterator wi1 = new SpreadSheetIterator(ss1, sheetIgnores1);
+        SpreadSheetIterator wi2 = new SpreadSheetIterator(ss2, sheetIgnores2);
         
         DiffReportCallback call = new DiffReportCallback() {
             Set<Object> sheets = new LinkedHashSet<Object>();
@@ -131,7 +144,7 @@ public class SpreadSheetDiffer {
         
         boolean differ = doDiff(wi1, wi2, call);
         
-        System.exit(differ ? 1 : 0);
+        return differ ? 1 : 0;
     }
     
     private static boolean doDiff(SpreadSheetIterator wi1, SpreadSheetIterator wi2, DiffReportCallback call){
@@ -211,5 +224,44 @@ public class SpreadSheetDiffer {
             }
         }
         return ret;
+    }
+    
+    private static boolean verifyFile(File file) {
+    	if (!file.exists()) {
+    		System.err.println("File file: " + file.getAbsolutePath() + " does not exist.");
+    		return false;
+    	}
+    	if (!file.canRead()) {
+    		System.err.println("File file: " + file.getAbsolutePath() + " not readable.");
+    		return false;
+    	}
+    	if (!file.isFile()) {
+    		System.err.println("File file: " + file.getAbsolutePath() + " is not a file.");
+    		return false;
+    	}
+    	return true;
+    }
+    
+    private static ISpreadSheet loadSpreadSheet(File file) throws Exception {
+    	// assume file is excel by default
+    	Exception excelReadException = null;
+    	try {
+    		Workbook workbook = WorkbookFactory.create(file);
+    		return new SpreadSheetExcel(workbook);
+    	} catch (Exception e) {
+    		excelReadException = e;
+    	}
+    	Exception odfReadException = null;
+    	try {
+    		SpreadsheetDocument spreadsheetDocument = SpreadsheetDocument.loadDocument(file);
+    		return new SpreadSheetOdf(spreadsheetDocument);
+    	} catch (Exception e) {
+    		odfReadException = e;
+    	}
+    	if (file.getName().matches(".*\\.ods.*")) {
+    		throw odfReadException;
+    	} else {
+    		throw excelReadException;
+    	}
     }
 }

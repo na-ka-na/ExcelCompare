@@ -1,4 +1,4 @@
-package com.ka.excelcmp;
+package com.ka.spreadsheet.diff;
 
 public interface DiffReportCallback {
 

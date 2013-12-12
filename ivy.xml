@@ -5,5 +5,7 @@
             <exclude name="xml-apis" />
             <exclude name="commons-codec" />
         </dependency>
+        <dependency org="org.apache.odftoolkit" name="simple-odf"            rev="0.7-incubating"             >
+        </dependency>
     </dependencies>
 </ivy-module>

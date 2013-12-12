@@ -1,11 +1,11 @@
-package com.ka.excelcmp;
+package com.ka.spreadsheet.diff;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.ka.excelcmp.SpreadSheetUtils.CELL_USER_TO_INTERNAL;
-import static com.ka.excelcmp.SpreadSheetUtils.COL_USER_TO_INTERNAL;
-import static com.ka.excelcmp.SpreadSheetUtils.ROW_USER_TO_INTERNAL;
+import static com.ka.spreadsheet.diff.SpreadSheetUtils.CELL_USER_TO_INTERNAL;
+import static com.ka.spreadsheet.diff.SpreadSheetUtils.COL_USER_TO_INTERNAL;
+import static com.ka.spreadsheet.diff.SpreadSheetUtils.ROW_USER_TO_INTERNAL;
 
 public class SheetIgnores {
     
