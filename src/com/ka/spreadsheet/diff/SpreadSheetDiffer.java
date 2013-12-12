@@ -17,7 +17,7 @@ public class SpreadSheetDiffer {
                 + "\n"
                 + "Notes: * Prints all diffs & extra cells on stdout" + "\n"
                 + "       * Process exits with 0 if workbooks match, 1 otherwise" + "\n"
-                + "       * Works with both xls, xlsx. You may compare an xls with xlsx too" + "\n"
+                + "       * Works with both xls, xlsx, ods. You may compare any of xls, xlsx, ods with each other" + "\n"
                 + "       * Compares only cell \"contents\". Formatting, macros are not diffed" + "\n"
                 + "       * Using --ignore1 & --ignore2 (optional) you may tell the diff to ignore cells" + "\n"
                 + "       * Give one and only one <sheet-ignore-spec> for a sheet" + "\n"
