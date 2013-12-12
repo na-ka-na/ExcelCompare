@@ -1,0 +1,17 @@
+EXTRA Cell in WB2 Sheet1!A2 => 'a2'
+EXTRA Cell in WB1 Sheet1!B2 => 'b2'
+DIFF  Cell at     Sheet1!C3 => 'c3' v/s 'c33'
+----------------- DIFF -------------------
+Sheets: [Sheet1]
+Rows: [3]
+Cols: [C]
+----------------- EXTRA WB1 -------------------
+Sheets: [Sheet1]
+Rows: [2]
+Cols: [B]
+----------------- EXTRA WB2 -------------------
+Sheets: [Sheet1]
+Rows: [2]
+Cols: [A]
+-----------------------------------------
+Excel files test/resources/ss1.xlsx and test/resources/ss2.xlsx differ

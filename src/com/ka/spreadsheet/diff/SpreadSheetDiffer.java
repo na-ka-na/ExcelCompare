@@ -1,9 +1,7 @@
 package com.ka.spreadsheet.diff;
 import java.io.File;
 import java.util.HashMap;
-import java.util.LinkedHashSet;
 import java.util.Map;
-import java.util.Set;
 
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.ss.usermodel.WorkbookFactory;
@@ -54,16 +52,22 @@ public class SpreadSheetDiffer {
      */
     
     public static void main(String[] args) {
-    	int ret = -1;
-    	try {
-    		ret = doMain(args);
-    	} catch (Exception e) {
-    		e.printStackTrace(System.err);
-    	}
+    	int ret = doDiff(args);
     	System.exit(ret);
     }
     
-    public static int doMain(String[] args) throws Exception {
+    public static int doDiff(String[] args) {
+    	int ret = -1;
+    	try {
+    		ret = doDiff(args, new StdoutSpreadSheetDiffCallback());
+    	} catch (Exception e) {
+    		//e.printStackTrace(System.err);
+    		System.err.println("Diff failed: " + e.getMessage());
+    	}
+    	return ret;
+    }
+    
+    public static int doDiff(String[] args, SpreadSheetDiffCallback diffCallback) throws Exception {
         if ((args.length < 2)){
             System.out.println(usage());
             return -1;
@@ -81,96 +85,32 @@ public class SpreadSheetDiffer {
         Map<String,SheetIgnores> sheetIgnores1 = parseSheetIgnores(args, "--ignore1");
         Map<String,SheetIgnores> sheetIgnores2 = parseSheetIgnores(args, "--ignore2");
 
-        SpreadSheetIterator wi1 = new SpreadSheetIterator(ss1, sheetIgnores1);
-        SpreadSheetIterator wi2 = new SpreadSheetIterator(ss2, sheetIgnores2);
+        SpreadSheetIterator ssi1 = new SpreadSheetIterator(ss1, sheetIgnores1);
+        SpreadSheetIterator ssi2 = new SpreadSheetIterator(ss2, sheetIgnores2);
         
-        DiffReportCallback call = new DiffReportCallback() {
-            Set<Object> sheets = new LinkedHashSet<Object>();
-            Set<Object> rows = new LinkedHashSet<Object>();
-            Set<Object> cols = new LinkedHashSet<Object>();
-            
-            Set<Object> sheets1 = new LinkedHashSet<Object>();
-            Set<Object> rows1 = new LinkedHashSet<Object>();
-            Set<Object> cols1 = new LinkedHashSet<Object>();
-            
-            Set<Object> sheets2 = new LinkedHashSet<Object>();
-            Set<Object> rows2 = new LinkedHashSet<Object>();
-            Set<Object> cols2 = new LinkedHashSet<Object>();
-            
-            @Override
-            public void reportWorkbooksDiffer(boolean differ) {
-                reportSummary();
-                System.out.println("Excel files " + file1 + " and " + file2 + " " + (differ ? "differ" : "match"));
-            }
-            
-            @Override
-            public void reportExtraCell(boolean firstWb, CellPos c) {
-                if (firstWb){
-                    sheets1.add(c.getSheetName());
-                    rows1.add(c.getRow());
-                    cols1.add(c.getColumn());
-                } else {
-                    sheets2.add(c.getSheetName());
-                    rows2.add(c.getRow());
-                    cols2.add(c.getColumn());
-                }
-                String wb = firstWb ? "WB1" : "WB2";
-                System.out.println("EXTRA Cell in " + wb + " " + c.getCellPosition() +" => '" + c.getStringValue() + "'");
-            }
-            
-            @Override
-            public void reportDiffCell(CellPos c1, CellPos c2) {
-                sheets.add(c1.getSheetName());
-                rows.add(c1.getRow());
-                cols.add(c1.getColumn());
-                System.out.println("DIFF  Cell at     " + c1.getCellPosition()+" => '"+ c1.getStringValue() +"' v/s '" + c2.getStringValue() + "'");
-            }
-            
-            private void reportSummary(){
-                reportS("DIFF", sheets, rows, cols);
-                reportS("EXTRA WB1", sheets1, rows1, cols1);
-                reportS("EXTRA WB2", sheets2, rows2, cols2);
-                System.out.println("-----------------------------------------");
-            }
-            
-            @SuppressWarnings("hiding")
-            private void reportS(String what, Set<Object> sheets, Set<Object> rows, Set<Object> cols) {
-                System.out.println("----------------- "+what+" -------------------");
-                System.out.println("Sheets: " + sheets);
-                System.out.println("Rows: " + rows);
-                System.out.println("Cols: " + cols);
-            }
-        };
-        
-        boolean differ = doDiff(wi1, wi2, call);
-        
-        return differ ? 1 : 0;
-    }
-    
-    private static boolean doDiff(SpreadSheetIterator wi1, SpreadSheetIterator wi2, DiffReportCallback call){
         boolean isDiff = false;
         CellPos c1 = null, c2 = null;
         while (true){
-            if ((c1==null) && wi1.hasNext()) c1 = wi1.next();
-            if ((c2==null) && wi2.hasNext()) c2 = wi2.next();
+            if ((c1==null) && ssi1.hasNext()) c1 = ssi1.next();
+            if ((c2==null) && ssi2.hasNext()) c2 = ssi2.next();
             
             if ((c1!=null) && (c2!=null)){
                 int c = c1.compareTo(c2);
                 if (c == 0){
                     if (!c1.getStringValue().equals(c2.getStringValue())){
                         isDiff = true;
-                        call.reportDiffCell(c1, c2);
+                        diffCallback.reportDiffCell(c1, c2);
                     }
                     c1 = c2 = null;
                 }
                 else if (c < 0){
                     isDiff = true;
-                    call.reportExtraCell(true, c1);
+                    diffCallback.reportExtraCell(true, c1);
                     c1 = null;
                 }
                 else {
                     isDiff = true;
-                    call.reportExtraCell(false, c2);
+                    diffCallback.reportExtraCell(false, c2);
                     c2 = null;
                 }
             } else {
@@ -180,24 +120,24 @@ public class SpreadSheetDiffer {
         if ((c1!=null) && (c2==null)){
             do {
                 isDiff = true;
-                call.reportExtraCell(true, c1);
-                c1 = wi1.hasNext() ? wi1.next() : null;
+                diffCallback.reportExtraCell(true, c1);
+                c1 = ssi1.hasNext() ? ssi1.next() : null;
             } while (c1 != null);
         }
         else if ((c1==null) && (c2!=null)){
             do {
                 isDiff = true;
-                call.reportExtraCell(false, c2);
-                c2 = wi2.hasNext() ? wi2.next() : null;
+                diffCallback.reportExtraCell(false, c2);
+                c2 = ssi2.hasNext() ? ssi2.next() : null;
             } while (c2 != null);
         }
         if ((c1!=null) || (c2!=null)){
             throw new IllegalStateException("Something wrong");
         }
         
-        call.reportWorkbooksDiffer(isDiff);
+        diffCallback.reportWorkbooksDiffer(isDiff, file1, file2);
         
-        return isDiff;
+        return isDiff ? 1 : 0;
     }
     
     private static Map<String,SheetIgnores> parseSheetIgnores(String[] args, String opt){
@@ -228,15 +168,15 @@ public class SpreadSheetDiffer {
     
     private static boolean verifyFile(File file) {
     	if (!file.exists()) {
-    		System.err.println("File file: " + file.getAbsolutePath() + " does not exist.");
+    		System.err.println("File: " + file + " does not exist.");
     		return false;
     	}
     	if (!file.canRead()) {
-    		System.err.println("File file: " + file.getAbsolutePath() + " not readable.");
+    		System.err.println("File: " + file + " not readable.");
     		return false;
     	}
     	if (!file.isFile()) {
-    		System.err.println("File file: " + file.getAbsolutePath() + " is not a file.");
+    		System.err.println("File: " + file + " is not a file.");
     		return false;
     	}
     	return true;
@@ -259,9 +199,9 @@ public class SpreadSheetDiffer {
     		odfReadException = e;
     	}
     	if (file.getName().matches(".*\\.ods.*")) {
-    		throw odfReadException;
+    		throw new RuntimeException("Failed to read as ods file: " + file, odfReadException);
     	} else {
-    		throw excelReadException;
+    		throw new RuntimeException("Failed to read as excel file: " + file, excelReadException);
     	}
     }
 }
