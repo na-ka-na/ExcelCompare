@@ -27,7 +27,7 @@ Report bugs / issues / requests [here](https://github.com/na-ka-na/ExcelCompare/
 * No other platform specific requirements
 * A shell script and a bat script are packaged
 
-Just [download](https://github.com/na-ka-na/ExcelCompare/downloads) the zip file.
+Just [download](https://github.com/na-ka-na/ExcelCompare/releases) the zip file.
 
 Extract it anywhere (and optionally you add the bin folder to PATH).
 
