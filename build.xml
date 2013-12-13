@@ -94,7 +94,11 @@
         </jar>
     </target>
 
-    <target name="build" depends="jar, copy-jars, copy-readme, copy-legal, write-binaries"/>
+	<target name="set-build-props">
+		<property name="ant.build.javac.target" value="1.5"/>
+	</target>
+	
+    <target name="build" depends="set-build-props, jar, copy-jars, copy-readme, copy-legal, write-binaries"/>
         
     <target name="write-binaries" depends="load-props">
         <copy file="${basedir}/scripts/${binary_name}" tofile="${installer.staging}/bin/${binary_name}" />
