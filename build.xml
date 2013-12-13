@@ -107,7 +107,11 @@
 	    </fail>
 	</target>
 	
-    <target name="build" depends="java-version-check, jar, copy-jars, copy-readme, copy-legal, write-binaries"/>
+    <target name="build" depends="java-version-check, jar, copy-jars, copy-readme, copy-legal, write-binaries, create-zip"/>
+	
+	<target name="create-zip" depends="load-props">
+		<zip destfile="${project.name}-${full.version}.zip" basedir="${installer.staging}" />
+	</target>
         
     <target name="write-binaries" depends="load-props">
         <copy file="${basedir}/scripts/${binary_name}" tofile="${installer.staging}/bin/${binary_name}" />
