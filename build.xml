@@ -93,12 +93,21 @@
             </manifest>
         </jar>
     </target>
-
-	<target name="set-build-props">
-		<property name="ant.build.javac.target" value="1.5"/>
+	
+	<target name="java-version-check">
+	    <fail message="Java version: ${ant.java.version}, required at most 1.6.">
+	    	<condition>
+	    	  <not>
+	    	    <or>
+	    	      <equals arg1="${ant.java.version}" arg2="1.6" />
+	    	      <equals arg1="${ant.java.version}" arg2="1.5" />
+	    	    </or>
+	    	  </not>
+	    	</condition>
+	    </fail>
 	</target>
 	
-    <target name="build" depends="set-build-props, jar, copy-jars, copy-readme, copy-legal, write-binaries"/>
+    <target name="build" depends="java-version-check, jar, copy-jars, copy-readme, copy-legal, write-binaries"/>
         
     <target name="write-binaries" depends="load-props">
         <copy file="${basedir}/scripts/${binary_name}" tofile="${installer.staging}/bin/${binary_name}" />
