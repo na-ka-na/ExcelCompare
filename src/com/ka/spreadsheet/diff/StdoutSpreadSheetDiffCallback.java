@@ -50,7 +50,6 @@ public class StdoutSpreadSheetDiffCallback implements SpreadSheetDiffCallback {
         System.out.println("DIFF  Cell at     " + c1.getCellPosition()+" => '"+ c1.getStringValue() +"' v/s '" + c2.getStringValue() + "'");
     }
     
-    @SuppressWarnings("hiding")
     private void reportSummary(String what, Set<Object> sheets, Set<Object> rows, Set<Object> cols) {
         System.out.println("----------------- "+what+" -------------------");
         System.out.println("Sheets: " + sheets);
