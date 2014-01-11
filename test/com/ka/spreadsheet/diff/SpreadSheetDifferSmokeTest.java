@@ -51,7 +51,7 @@ public class SpreadSheetDifferSmokeTest {
 		testDiff(
 			"Numeric and formula",
 			new String[]{"test/resources/numeric_and_formula.xls", "test/resources/numeric_and_formula.xlsx"},
-			new File("test/resources/numeric_and_formula.out"),
+			new File("test/resources/numeric_and_formula.xls.xlsx.out"),
 			null);
 		System.out.println("All tests pass");
 	}
