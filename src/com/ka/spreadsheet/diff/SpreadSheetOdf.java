@@ -100,12 +100,13 @@ class RowOdf implements IRow {
 
 	@Override
 	public Iterator<ICell> getCellIterator() {
+		final int numCells = row.getCellCount();
 		return new Iterator<ICell>() {
 			private int currCellIdx = 0;
 
 			@Override
 			public boolean hasNext() {
-				return currCellIdx < row.getCellCount();
+				return currCellIdx < numCells;
 			}
 
 			@Override
@@ -141,6 +142,18 @@ class CellOdf implements ICell {
 
 	@Override
 	public String getStringValue() {
+		String formula = cell.getFormula();
+		if (formula != null) {
+			return formula;
+		}
+		String valueType = cell.getValueType();
+		if (valueType != null) {
+			if (valueType.equals("float")) {
+				return String.valueOf(cell.getDoubleValue());
+			} else if (valueType.equals("boolean")) {
+				return String.valueOf(cell.getBooleanValue());
+			}
+		}
 		return cell.getStringValue();
 	}
 }
