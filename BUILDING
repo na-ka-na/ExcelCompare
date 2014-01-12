@@ -1,0 +1,6 @@
+Release
+-------
+# Note: set jdk to <= 6 before following
+> ant clean test
+> ant clean build
+# This will create the release zip
