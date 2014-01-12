@@ -1,8 +1,28 @@
+Apache ODF Toolkit
 
-Simple Java API for ODF (Simple ODF)
-Copyright 2010-2012 The Apache Software Foundation
+Copyright 2011-2013 The Apache Software Foundation
 
 This product includes software developed at
 The Apache Software Foundation (http://www.apache.org/).
 
+Portions copyright IBM, 2009-2011. All rights reserved.
+Portions copyright Oracle, 2008-2011. All rights reserved.
 
+This product contains Open Document Format(ODF) Schema documents. 
+Copyright (c) OASIS Open 2002-2011. All Rights Reserved.
+
+This product contains MathML XML Schema documents. Copyright (c) 1998-2003
+World Wide Web Consortium (Massachusetts Institute of Technology, European
+Research Consortium for Informatics and Mathematics, Keio University)
+
+This product contains Oracle Multi-Schema XML Validator (MSV).
+under BSD license. Copyright (c) 2001-2009 Sun Microsystems, Inc. All Rights Reserved.
+
+This product contains ISO RELAX JARV API to JAXP 1.3 validation API bridge
+(http://java.net/projects/isorelax-jaxp-bridge). under MIT License (MIT)
+Copyright (c) 2006 Kohsuke Kawaguchi
+
+
+
+
+    
