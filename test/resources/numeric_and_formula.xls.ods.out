@@ -1,0 +1,18 @@
+EXTRA Cell in WB2 Sheet1!A1 => ''
+EXTRA Cell in WB2 Sheet1!B1 => ''
+DIFF  Cell at     Sheet1!B2 => 'A2+1' v/s 'of:=[.A2]+1'
+DIFF  Cell at     Sheet1!B3 => 'A3+1' v/s 'of:=[.A3]+1'
+----------------- DIFF -------------------
+Sheets: [Sheet1]
+Rows: [2, 3]
+Cols: [B]
+----------------- EXTRA WB1 -------------------
+Sheets: []
+Rows: []
+Cols: []
+----------------- EXTRA WB2 -------------------
+Sheets: [Sheet1]
+Rows: [1]
+Cols: [A, B]
+-----------------------------------------
+Excel files test/resources/numeric_and_formula.xls and test/resources/numeric_and_formula.ods differ
