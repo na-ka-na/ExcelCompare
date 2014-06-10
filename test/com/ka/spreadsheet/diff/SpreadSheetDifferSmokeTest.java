@@ -75,20 +75,27 @@ public class SpreadSheetDifferSmokeTest {
 		outFile.deleteOnExit();
 		errFile.deleteOnExit();
 		boolean testCompleted = false;
-		
-		PrintStream out = new PrintStream(outFile);
-	    PrintStream err = new PrintStream(errFile);
-	     
+		PrintStream out = null;
+		PrintStream err = null;
 		try {
-			System.setOut(out);
-			System.setErr(err);
-			SpreadSheetDiffer.doDiff(args);
-			testCompleted = true;
+			out = new PrintStream(outFile);
+			try {
+				err = new PrintStream(errFile);
+				try {
+					System.setOut(out);
+					System.setErr(err);				
+					SpreadSheetDiffer.doDiff(args);
+					testCompleted = true;
+				} finally {
+					System.setOut(oldOut);
+					System.setErr(oldErr);					
+				}
+			} finally {
+				err.close();
+			}
+			
 		} finally {
-			System.setOut(oldOut);
-			System.setErr(oldErr);
-			if (out != null)	out.close();
-			if (err != null)	err.close();
+			out.close();
 		}
 		assertTrue(testCompleted);
 		verifyFileContentsSame(errFile, expectedErrFile);

@@ -11,7 +11,9 @@ public class WorkbookIgnores {
 	}
 	
 	public SheetIgnores fetchSheetIgnores(String sheetName) {
-		return ignore.get(sheetName) != null? ignore.get(sheetName) : (ignore.keySet().contains("") ? ignore.get("") : null);
+		SheetIgnores ignoredByName = ignore.get(sheetName);
+		SheetIgnores ignoredAll = ignore.get("");
+		return ignoredByName != null? ignoredByName : ignoredAll;
 	}
 	
 	
