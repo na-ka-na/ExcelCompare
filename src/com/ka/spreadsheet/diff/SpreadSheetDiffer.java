@@ -82,11 +82,11 @@ public class SpreadSheetDiffer {
         ISpreadSheet ss1 = loadSpreadSheet(file1);
         ISpreadSheet ss2 = loadSpreadSheet(file2);
         
-        Map<String,SheetIgnores> sheetIgnores1 = parseSheetIgnores(args, "--ignore1");
-        Map<String,SheetIgnores> sheetIgnores2 = parseSheetIgnores(args, "--ignore2");
+        WorkbookIgnores workbookIgnores1 = new WorkbookIgnores(args, "--ignore1");
+        WorkbookIgnores workbookIgnores2 = new WorkbookIgnores(args, "--ignore2");
 
-        SpreadSheetIterator ssi1 = new SpreadSheetIterator(ss1, sheetIgnores1);
-        SpreadSheetIterator ssi2 = new SpreadSheetIterator(ss2, sheetIgnores2);
+        SpreadSheetIterator ssi1 = new SpreadSheetIterator(ss1, workbookIgnores1);
+        SpreadSheetIterator ssi2 = new SpreadSheetIterator(ss2, workbookIgnores2);
         
         boolean isDiff = false;
         CellPos c1 = null, c2 = null;
@@ -140,32 +140,6 @@ public class SpreadSheetDiffer {
         return isDiff ? 1 : 0;
     }
     
-    private static Map<String,SheetIgnores> parseSheetIgnores(String[] args, String opt){
-        int start = -1, end = -1;
-        for (int i=0; i<args.length; i++){
-            if (start == -1){
-                if (opt.equals(args[i])){
-                    start = i+1;
-                }
-            }
-            else {
-                if (args[i].startsWith("--")){
-                    end = i;
-                }
-            }
-        }
-        if (end == -1) end = args.length;
-        
-        Map<String,SheetIgnores> ret = new HashMap<String,SheetIgnores>();
-        if (start != -1){
-            for (int i=start; i<end; i++){
-                SheetIgnores s = SheetIgnores.newSheetIgnore(args[i]);
-                ret.put(s.sheetName(), s);
-            }
-        }
-        return ret;
-    }
-    
     private static boolean verifyFile(File file) {
     	if (!file.exists()) {
     		System.err.println("File: " + file + " does not exist.");
@@ -194,7 +168,7 @@ public class SpreadSheetDiffer {
     	Exception odfReadException = null;
     	try {
     		SpreadsheetDocument spreadsheetDocument = SpreadsheetDocument.loadDocument(file);
-    		return new SpreadSheetOdf(spreadsheetDocument);
+    		return new SpreadSheetOdf(spreadsheetDocument);    		
     	} catch (Exception e) {
     		odfReadException = e;
     	}

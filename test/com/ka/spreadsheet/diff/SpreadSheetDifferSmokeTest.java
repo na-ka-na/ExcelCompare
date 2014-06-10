@@ -58,6 +58,11 @@ public class SpreadSheetDifferSmokeTest {
 			new String[]{"test/resources/numeric_and_formula.xls", "test/resources/numeric_and_formula.ods"},
 			new File("test/resources/numeric_and_formula.xls.ods.out"),
 			null);
+		testDiff(
+			"Nullable Sheet",
+			new String[]{"test/resources/Multisheet.xls", "test/resources/Multisheet.xls", "--ignore1", "::B", "--ignore2", "::B"},
+			new File("test/resources/nullableSheet_xls.out"),
+			null);
 		System.out.println("All tests pass");
 	}
 	
@@ -70,8 +75,11 @@ public class SpreadSheetDifferSmokeTest {
 		outFile.deleteOnExit();
 		errFile.deleteOnExit();
 		boolean testCompleted = false;
-		try (PrintStream out = new PrintStream(outFile);
-		     PrintStream err = new PrintStream(errFile)) {
+		
+		PrintStream out = new PrintStream(outFile);
+	    PrintStream err = new PrintStream(errFile);
+	     
+		try {
 			System.setOut(out);
 			System.setErr(err);
 			SpreadSheetDiffer.doDiff(args);
@@ -79,6 +87,8 @@ public class SpreadSheetDifferSmokeTest {
 		} finally {
 			System.setOut(oldOut);
 			System.setErr(oldErr);
+			if (out != null)	out.close();
+			if (err != null)	err.close();
 		}
 		assertTrue(testCompleted);
 		verifyFileContentsSame(errFile, expectedErrFile);

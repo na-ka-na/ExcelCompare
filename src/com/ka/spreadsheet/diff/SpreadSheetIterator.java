@@ -5,9 +5,7 @@ import java.util.Map;
 
 public class SpreadSheetIterator{
     
-	private final Map<String,SheetIgnores> sheetIgnores;
 	private final Iterator<ISheet> sheetIterator;
-    
     private ISheet sheet;
     private SheetIgnores currSheetIgnores;
     private Iterator<IRow> rows;
@@ -15,10 +13,11 @@ public class SpreadSheetIterator{
     
     private boolean seenNext;
     private ICell nextCell;
+    private final WorkbookIgnores workbookIgnores;
     
-    SpreadSheetIterator(ISpreadSheet spreadSheet, Map<String,SheetIgnores> sheetIgnores){
-        this.sheetIgnores = sheetIgnores;
-        this.sheetIterator = spreadSheet.getSheetIterator();
+    SpreadSheetIterator(ISpreadSheet spreadSheet, WorkbookIgnores workbookIgnores){
+    	this.workbookIgnores = workbookIgnores;
+    	this.sheetIterator = spreadSheet.getSheetIterator();
     }
     
     boolean hasNext(){
@@ -40,7 +39,7 @@ public class SpreadSheetIterator{
                 }
                 else if (sheetIterator.hasNext()){
                     sheet = sheetIterator.next();
-                    currSheetIgnores = sheetIgnores.get(sheet.getName());
+                    currSheetIgnores = workbookIgnores.fetchSheetIgnores(sheet.getName());
                     if (!ignoreSheet()){
                         rows = sheet.getRowIterator();
                     }
