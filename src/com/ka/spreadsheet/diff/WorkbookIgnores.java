@@ -10,10 +10,10 @@ public class WorkbookIgnores {
 		ignore = parseSheetIgnores(args, opt);
 	}
 	
-	public SheetIgnores fetchSheetIgnores(String sheetName) {
+	public @Nullable SheetIgnores fetchSheetIgnores(String sheetName) {
 		SheetIgnores ignoredByName = ignore.get(sheetName);
 		SheetIgnores ignoredAll = ignore.get("");
-		return ignoredByName != null ? ignoredByName : ignoredAll;
+		return ignoredByName != null ? ignoredByName : ((ignoredAll != null) ? ignoredAll : null );
 	}
 	
 	
