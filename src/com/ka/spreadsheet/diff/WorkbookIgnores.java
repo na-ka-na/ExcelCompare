@@ -13,7 +13,7 @@ public class WorkbookIgnores {
 	public SheetIgnores fetchSheetIgnores(String sheetName) {
 		SheetIgnores ignoredByName = ignore.get(sheetName);
 		SheetIgnores ignoredAll = ignore.get("");
-		return ignoredByName != null? ignoredByName : ignoredAll;
+		return ignoredByName != null ? ignoredByName : ignoredAll;
 	}
 	
 	
