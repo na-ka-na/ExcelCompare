@@ -91,11 +91,11 @@ public class SpreadSheetDifferSmokeTest {
 					System.setErr(oldErr);					
 				}
 			} finally {
-				err.close();
+				if(err != null)	err.close();
 			}
 			
 		} finally {
-			out.close();
+			if(out != null)	out.close();
 		}
 		assertTrue(testCompleted);
 		verifyFileContentsSame(errFile, expectedErrFile);
