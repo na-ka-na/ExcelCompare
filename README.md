@@ -87,10 +87,6 @@ Notes:
 
         excel_cmp 1.xlsx 2.xlsx --ignore1 Sheet1::A --ignore2 Sheet1::A
 
-* Ignore column A in all spreadsheets in both
-
-        excel_cmp 1.xlsx 2.xlsx --ignore1 ::A --ignore2 ::A        
-
 * Ignore columns A,D and rows 1-5, 20-25
 
         excel_cmp 1.xlsx 2.xlsx --ignore1 Sheet1:1-5,20-25:A,D --ignore2 Sheet1:1-5,20-25:A,D
