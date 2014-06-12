@@ -60,7 +60,7 @@ public class SpreadSheetDifferSmokeTest {
 			null);
 		testDiff(
 			"Nullable Sheet",
-			new String[]{"test/resources/Multisheet.xls", "test/resources/Multisheet.xls", "--ignore1", "::B", "--ignore2", "::B"},
+			new String[]{"test/resources/MultiSheet.xls", "test/resources/MultiSheet.xls", "--ignore1", "::B", "--ignore2", "::B"},
 			new File("test/resources/nullableSheet_xls.out"),
 			null);
 		System.out.println("All tests pass");
