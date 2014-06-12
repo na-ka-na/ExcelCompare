@@ -5,7 +5,6 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.LinkedList;
-import java.util.Objects;
 
 import javax.annotation.Nullable;
 
@@ -32,12 +31,16 @@ public class TestUtils {
 	}
 	
 	public static LinkedList<String> readFileIntoLines(File file) throws IOException {
-		LinkedList<String> lines = new LinkedList<>();
-		try (BufferedReader reader = new BufferedReader(new FileReader(file))) {
+		LinkedList<String> lines = new LinkedList<String>();
+		BufferedReader reader = new BufferedReader(new FileReader(file));
+		try {
 			String line = null;
 			while ((line = reader.readLine()) != null) {
 				lines.add(line);
 			}
+		}
+		finally	{
+			if (reader != null)	reader.close();
 		}
 		return lines;
 	}
@@ -47,7 +50,7 @@ public class TestUtils {
 	}
 	
 	public static void assertEquals(String messagePrefix, Object actual, Object expected) {
-		if (!Objects.equals(actual, expected)) {
+		if (((actual == null && expected != null) || (actual != null && expected == null)) || !actual.equals(expected)) {
 			throw new AssertionError(
 				messagePrefix
 				+ "\nactual: " + actual
