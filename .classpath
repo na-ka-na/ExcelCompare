@@ -2,9 +2,9 @@
 <classpath>
 	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="src" path="test"/>
-	<classpathentry exported="true" kind="lib" path="lib/ivy/jar/dom4j-1.6.1.jar"/>
-	<classpathentry exported="true" kind="lib" path="lib/ivy/jar/stax-api-1.0.1.jar"/>
-	<classpathentry exported="true" kind="lib" path="lib/ivy/jar/xmlbeans-2.3.0.jar"/>
+	<classpathentry kind="lib" path="lib/ivy/jar/dom4j-1.6.1.jar"/>
+	<classpathentry kind="lib" path="lib/ivy/jar/stax-api-1.0.1.jar"/>
+	<classpathentry kind="lib" path="lib/ivy/jar/xmlbeans-2.3.0.jar"/>
 	<classpathentry kind="lib" path="lib/manual/jar/simple-odf-0.8-incubating-jar-with-dependencies.jar" sourcepath="lib/manual/source/simple-odf-0.8-incubating-sources.jar">
 		<attributes>
 			<attribute name="javadoc_location" value="jar:platform:/resource/ExcelCompare/lib/manual/doc/simple-odf-0.8-incubating-javadoc.jar!/"/>

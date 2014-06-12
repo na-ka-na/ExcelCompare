@@ -1,7 +1,5 @@
 package com.ka.spreadsheet.diff;
 import java.io.File;
-import java.util.HashMap;
-import java.util.Map;
 
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.ss.usermodel.WorkbookFactory;
@@ -21,7 +19,8 @@ public class SpreadSheetDiffer {
                 + "       * Give one and only one <sheet-ignore-spec> for a sheet" + "\n"
                 + "\n"
                 + "Sheet Ignore Spec:  <sheet-name>:<row-ignore-spec>:<column-ignore-spec>:<cell-ignore-spec>" + "\n"
-                + "                    * Everything except <sheet-name> is optional" + "\n"
+                + "                    * Leaving <sheet-name> blank corresponds to this spec applying to all sheets" + "\n"
+                + "                      for example ::A will ignore column A in all sheets" + "\n"
                 + "                    * To ignore whole sheet, just provide <sheet-name>" + "\n"
                 + "                    * Any cell satisfying any ignore spec in the sheet (row, col, or cell) will be ignored in diff" + "\n"
                 + "                    * You may provide only <cell-ignore-spec> as - <sheet-name>:::<cell-ignore-spec>" + "\n"

@@ -43,8 +43,8 @@ Notes:
 
 ### Sheet Ignore Spec
     <sheet-name>:<row-ignore-spec>:<column-ignore-spec>:<cell-ignore-spec>
-    
-* Everything except &lt;sheet-name> is optional
+
+* Leaving &lt;sheet-name> blank corresponds to this spec applying to all sheets, for example ::A will ignore column A in all sheets
 * To ignore whole sheet, just provide &lt;sheet-name>
 * Any cell satisfying any ignore spec in the sheet (row, col, or cell) will be ignored in diff
 * You may provide only &lt;cell-ignore-spec> as - &lt;sheet-name>:::&lt;cell-ignore-spec>
@@ -86,6 +86,10 @@ Notes:
 * Ignore column A in both 
 
         excel_cmp 1.xlsx 2.xlsx --ignore1 Sheet1::A --ignore2 Sheet1::A
+        
+* Ignore column A across all sheets in both 
+
+        excel_cmp 1.xlsx 2.xlsx --ignore1 ::A --ignore2 ::A
 
 * Ignore columns A,D and rows 1-5, 20-25
 
@@ -103,6 +107,9 @@ Notes:
 
         excel_cmp 1.xlsx 2.xlsx --ignore1 Sheet2:::A1-B10 --ignore2 Sheet2:::A1-B10
 
+* Ignore column A in all sheets of both files
+
+        excel_cmp 1.xlsx 2.xlsx --ignore1 ::A --ignore2 ::A
 
 ## Output format
 * Each diff or extra cell is reported per line as follows
