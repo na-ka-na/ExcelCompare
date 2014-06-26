@@ -1,0 +1,17 @@
+DIFF  Cell at     Sheet1!A1 => 'a11' v/s 'a1'
+DIFF  Cell at     Sheet1!B2 => 'b22' v/s 'b2'
+DIFF  Cell at     Sheet1!C3 => 'c33' v/s 'c3'
+----------------- DIFF -------------------
+Sheets: [Sheet1]
+Rows: [1, 2, 3]
+Cols: [A, B, C]
+----------------- EXTRA WB1 -------------------
+Sheets: []
+Rows: []
+Cols: []
+----------------- EXTRA WB2 -------------------
+Sheets: []
+Rows: []
+Cols: []
+-----------------------------------------
+Excel files test\resources\ss3.ods and test\resources\ss3.xlsx differ
