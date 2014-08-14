@@ -102,7 +102,7 @@ public class SpreadSheetDifferSmokeTest {
 					"Bad file",
 					new String[]{"test/resources/badfile.txt", "test/resources/ss1.xlsx"},
 					null,
-					new File("test/resources/bad_file" + (File.separatorChar == '\\' ? "_win":"") + ".err"));
+					new File("test/resources/win_bad_file.err"));
 			testDiff(
 					"Numeric and formula xls xlsx",
 					new String[]{"test/resources/numeric_and_formula.xls", "test/resources/numeric_and_formula.xlsx"},
