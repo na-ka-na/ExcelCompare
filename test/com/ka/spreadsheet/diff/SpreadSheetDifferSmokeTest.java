@@ -72,6 +72,11 @@ public class SpreadSheetDifferSmokeTest {
 					new String[]{"test/resources/ss3.xlsx", "test/resources/ss3.ods", "--ignore1", "Sheet1:2:B", "--ignore2", "Sheet1:2:B"},
 					new File("test/resources/ss3_xlsx_ss3_ignore2B_ods.out"),
 					null);				
+			testDiff(
+					"Common ignore argument for a single cell",
+					new String[]{"test/resources/ss3.xlsx", "test/resources/ss3.ods", "--ignore", "Sheet1:2:B"},
+					new File("test/resources/ss3_xlsx_ss3_ignore2B_ods.out"),
+					null);						
 		} else if ("\\".equals(System.getProperty("file.separator")))	{
 			testDiff(
 					"Identical xlsx files",
@@ -127,7 +132,12 @@ public class SpreadSheetDifferSmokeTest {
 					"Ignore single cell",
 					new String[]{"test/resources/ss3.xlsx", "test/resources/ss3.ods", "--ignore1", "Sheet1:2:B", "--ignore2", "Sheet1:2:B"},
 					new File("test/resources/win_ss3_xlsx_ss3_ignore2B_ods.out"),
-					null);		
+					null);
+			testDiff(
+					"Common ignore argument for a single cell",
+					new String[]{"test/resources/ss3.xlsx", "test/resources/ss3.ods", "--ignore", "Sheet1:2:B"},
+					new File("test/resources/win_ss3_xlsx_ss3_ignore2B_ods.out"),
+					null);			
 		} 	
 		System.out.println("All tests pass");
 	}
