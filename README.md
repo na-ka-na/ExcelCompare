@@ -33,11 +33,10 @@ Extract it anywhere (and optionally you add the bin folder to PATH).
 
 ## Usage
 
-    $ excel_cmp <file1> <file2> [--ignore <sheet-ignore-spec> ..] [--ignore1 <sheet-ignore-spec> ..] [--ignore2 <sheet-ignore-spec> ..]
+    $ excel_cmp <file1> <file2> [--ignore1 <sheet-ignore-spec> ..] [--ignore2 <sheet-ignore-spec> ..]
 
 Notes:
 
-* --ignore to specify common ignores for both files
 * --ignore1 (file1) and --ignore2 (file2) are independent of each other
 * Give one and only one &lt;sheet-ignore-spec> per sheet
 * File path is assumed relative to current directory unless full path is provided
@@ -82,39 +81,35 @@ Notes:
  
 * Ignore Sheet1 in both
 
-        excel_cmp 1.xlsx 2.xlsx --ignore Sheet1
+        excel_cmp 1.xlsx 2.xlsx --ignore1 Sheet1 --ignore2 Sheet1
 
 * Ignore column A in both 
 
-        excel_cmp 1.xlsx 2.xlsx --ignore Sheet1::A
+        excel_cmp 1.xlsx 2.xlsx --ignore1 Sheet1::A --ignore2 Sheet1::A
         
 * Ignore column A across all sheets in both 
 
-        excel_cmp 1.xlsx 2.xlsx --ignore ::A
+        excel_cmp 1.xlsx 2.xlsx --ignore1 ::A --ignore2 ::A
 
 * Ignore columns A,D and rows 1-5, 20-25
 
-        excel_cmp 1.xlsx 2.xlsx --ignore Sheet1:1-5,20-25:A,D
+        excel_cmp 1.xlsx 2.xlsx --ignore1 Sheet1:1-5,20-25:A,D --ignore2 Sheet1:1-5,20-25:A,D
 
 * Ignore columns A,D and rows 1-5, 20-25 and cells F6,H8
 
-        excel_cmp 1.xlsx 2.xlsx --ignore Sheet1:1-5,20-25:A,D:F6,H8
+        excel_cmp 1.xlsx 2.xlsx --ignore1 Sheet1:1-5,20-25:A,D:F6,H8 --ignore2 Sheet1:1-5,20-25:A,D:F6,H8
 
 * Ignore column A in Sheet1 and column B in Sheet2
 
-        excel_cmp 1.xlsx 2.xlsx --ignore Sheet1::A Sheet2::B
+        excel_cmp 1.xlsx 2.xlsx --ignore1 Sheet1::A Sheet2::B --ignore2 Sheet1::A Sheet2::B
 
 * Ignore cells A1-B10 in Sheet2 of both files
 
-        excel_cmp 1.xlsx 2.xlsx --ignore Sheet2:::A1-B10
+        excel_cmp 1.xlsx 2.xlsx --ignore1 Sheet2:::A1-B10 --ignore2 Sheet2:::A1-B10
 
 * Ignore column A in all sheets of both files
 
-        excel_cmp 1.xlsx 2.xlsx --ignore ::A
-
-* Ignore Sheet 1 in both and column B in file2
-
-        excel_cmp 1.xlsx 2.xlsx --ignore Sheet1 --ignore2 ::B
+        excel_cmp 1.xlsx 2.xlsx --ignore1 ::A --ignore2 ::A
 
 ## Output format
 * Each diff or extra cell is reported per line as follows
