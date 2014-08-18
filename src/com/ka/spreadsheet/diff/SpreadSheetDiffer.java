@@ -9,13 +9,13 @@ import org.odftoolkit.simple.SpreadsheetDocument;
 public class SpreadSheetDiffer {
 
     static String usage(){
-        return    "Usage> excel_cmp <file1> <file2> [--ignore <sheet-ignore-spec> <sheet-ignore-spec> ..] [--ignore1 <sheet-ignore-spec> <sheet-ignore-spec> ..] [--ignore2 <sheet-ignore-spec> <sheet-ignore-spec> ..]" + "\n"
+        return    "Usage> excel_cmp <file1> <file2> [--ignore1 <sheet-ignore-spec> <sheet-ignore-spec> ..] [--ignore2 <sheet-ignore-spec> <sheet-ignore-spec> ..]" + "\n"
                 + "\n"
                 + "Notes: * Prints all diffs & extra cells on stdout" + "\n"
                 + "       * Process exits with 0 if workbooks match, 1 otherwise" + "\n"
                 + "       * Works with both xls, xlsx, ods. You may compare any of xls, xlsx, ods with each other" + "\n"
                 + "       * Compares only cell \"contents\". Formatting, macros are not diffed" + "\n"
-                + "       * Using --ignore or --ignore1 & --ignore2 (optional) you may tell the diff to ignore cells" + "\n"
+                + "       * Using --ignore1 & --ignore2 (optional) you may tell the diff to ignore cells" + "\n"
                 + "       * Give one and only one <sheet-ignore-spec> for a sheet" + "\n"
                 + "\n"
                 + "Sheet Ignore Spec:  <sheet-name>:<row-ignore-spec>:<column-ignore-spec>:<cell-ignore-spec>" + "\n"
@@ -40,7 +40,7 @@ public class SpreadSheetDiffer {
                 + "                    * Range may be provided as A1-D10" + "\n"
                 + "\n"
                 + "Example command line: " + "\n"
-                + "excel_cmp 1.xlsx 2.xlsx --ignore1 Sheet1:::A1,B1,J10,K11,D4 Sheet2:::A1 --ignore2 Sheet1:::A1,D4,J10 Sheet3:::A1 --ignore Sheet4:::A1" + "\n"
+                + "excel_cmp 1.xlsx 2.xlsx --ignore1 Sheet1:::A1,B1,J10,K11,D4 Sheet2:::A1 --ignore2 Sheet1:::A1,D4,J10 Sheet3:::A1" + "\n"
                 ;
     }
     
@@ -81,9 +81,8 @@ public class SpreadSheetDiffer {
         ISpreadSheet ss1 = loadSpreadSheet(file1);
         ISpreadSheet ss2 = loadSpreadSheet(file2);
         
-        WorkbookIgnores workbookIgnores = new WorkbookIgnores(args, "--ignore");
-        WorkbookIgnores workbookIgnores1 = new WorkbookIgnores(args, "--ignore1", workbookIgnores);
-        WorkbookIgnores workbookIgnores2 = new WorkbookIgnores(args, "--ignore2", workbookIgnores);
+        WorkbookIgnores workbookIgnores1 = new WorkbookIgnores(args, "--ignore1");
+        WorkbookIgnores workbookIgnores2 = new WorkbookIgnores(args, "--ignore2");
 
         SpreadSheetIterator ssi1 = new SpreadSheetIterator(ss1, workbookIgnores1);
         SpreadSheetIterator ssi2 = new SpreadSheetIterator(ss2, workbookIgnores2);
