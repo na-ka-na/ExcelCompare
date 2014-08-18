@@ -8,10 +8,29 @@ import javax.annotation.Nullable;
 public class WorkbookIgnores {
 	private Map<String,SheetIgnores> ignore;
 	
+	/**
+	 * Create container for workbook ignores based on given command line args that follow
+	 * the opt argument.
+	 * @param args array of command line parameters
+	 * @param opt name of matching command line argument
+	 */	
 	public WorkbookIgnores(String[] args, String opt) {
 		ignore = parseSheetIgnores(args, opt);
 	}
 	
+	/**
+	 * Create container for workbook ignores based on given command line args that follow
+	 * the opt argument. Append additional ignores from workbookIgnores
+	 * @param args array of command line parameters
+	 * @param opt name of matching command line argument
+	 * @param workbookIgnores used for additional ignores
+	 */
+	public WorkbookIgnores(String[] args, String opt, WorkbookIgnores workbookIgnores)
+	{
+		this(args, opt);
+		ignore.putAll(workbookIgnores.ignore);
+	}
+
 	public @Nullable SheetIgnores fetchSheetIgnores(String sheetName) {
 		SheetIgnores ignoredByName = ignore.get(sheetName);
 		SheetIgnores ignoredAll = ignore.get("");
