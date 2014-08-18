@@ -67,6 +67,11 @@ public class SpreadSheetDifferSmokeTest {
 					new String[]{"test/resources/MultiSheet.xls", "test/resources/MultiSheet.xls", "--ignore1", "::B", "--ignore2", "::B"},
 					new File("test/resources/nullableSheet_xls.out"),
 					null);
+			testDiff(
+					"Ignore single cell",
+					new String[]{"test/resources/ss3.xlsx", "test/resources/ss3.ods", "--ignore1", "Sheet1:2:B", "--ignore2", "Sheet1:2:B"},
+					new File("test/resources/ss3_xlsx_ss3_ignore2B_ods.out"),
+					null);				
 		} else if ("\\".equals(System.getProperty("file.separator")))	{
 			testDiff(
 					"Identical xlsx files",
@@ -102,7 +107,7 @@ public class SpreadSheetDifferSmokeTest {
 					"Bad file",
 					new String[]{"test/resources/badfile.txt", "test/resources/ss1.xlsx"},
 					null,
-					new File("test/resources/bad_file.err"));
+					new File("test/resources/win_bad_file.err"));
 			testDiff(
 					"Numeric and formula xls xlsx",
 					new String[]{"test/resources/numeric_and_formula.xls", "test/resources/numeric_and_formula.xlsx"},
@@ -118,6 +123,11 @@ public class SpreadSheetDifferSmokeTest {
 					new String[]{"test/resources/MultiSheet.xls", "test/resources/MultiSheet.xls", "--ignore1", "::B", "--ignore2", "::B"},
 					new File("test/resources/win_nullableSheet_xls.out"),
 					null);
+			testDiff(
+					"Ignore single cell",
+					new String[]{"test/resources/ss3.xlsx", "test/resources/ss3.ods", "--ignore1", "Sheet1:2:B", "--ignore2", "Sheet1:2:B"},
+					new File("test/resources/win_ss3_xlsx_ss3_ignore2B_ods.out"),
+					null);		
 		} 	
 		System.out.println("All tests pass");
 	}
