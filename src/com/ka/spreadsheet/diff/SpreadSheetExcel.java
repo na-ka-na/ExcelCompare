@@ -10,15 +10,15 @@ import org.apache.poi.ss.usermodel.Workbook;
 public class SpreadSheetExcel implements ISpreadSheet {
 
 	private Workbook workbook;
-	
+
 	public SpreadSheetExcel(Workbook workbook) {
 		this.workbook = workbook;
 	}
-	
+
 	@Override
 	public Iterator<ISheet> getSheetIterator() {
 		return new Iterator<ISheet>() {
-			
+
 			private int currSheetIdx = 0;
 
 			@Override
@@ -46,17 +46,17 @@ class SheetExcel implements ISheet {
 
 	private Sheet sheet;
 	private int sheetIdx;
-	
+
 	public SheetExcel(Sheet sheet, int sheetIdx) {
 		this.sheet = sheet;
 		this.sheetIdx = sheetIdx;
 	}
-	
+
 	@Override
 	public String getName() {
 		return sheet.getSheetName();
 	}
-	
+
 	@Override
 	public int getSheetIndex() {
 		return sheetIdx;
@@ -66,7 +66,7 @@ class SheetExcel implements ISheet {
 	public Iterator<IRow> getRowIterator() {
 		final Iterator<Row> rowIterator = sheet.rowIterator();
 		return new Iterator<IRow>() {
-			
+
 			@Override
 			public boolean hasNext() {
 				return rowIterator.hasNext();
@@ -86,9 +86,9 @@ class SheetExcel implements ISheet {
 }
 
 class RowExcel implements IRow {
-	
+
 	private Row row;
-	
+
 	public RowExcel(Row row) {
 		this.row = row;
 	}
@@ -102,7 +102,7 @@ class RowExcel implements IRow {
 	public Iterator<ICell> getCellIterator() {
 		final Iterator<Cell> cellIterator = row.cellIterator();
 		return new Iterator<ICell>() {
-			
+
 			@Override
 			public boolean hasNext() {
 				return cellIterator.hasNext();
@@ -124,7 +124,7 @@ class RowExcel implements IRow {
 class CellExcel implements ICell {
 
 	private Cell cell;
-	
+
 	public CellExcel(Cell cell) {
 		this.cell = cell;
 	}

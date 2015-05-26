@@ -11,26 +11,26 @@ public interface ISpreadSheet {
 }
 
 interface ISheet {
-	
+
 	String getName();
-	
+
 	int getSheetIndex();
-	
+
 	Iterator<IRow> getRowIterator();
 }
 
 interface IRow {
-	
+
 	int getRowIndex();
-	
+
 	Iterator<ICell> getCellIterator();
 }
 
 interface ICell {
-	
+
 	int getRowIndex();
-	
+
 	int getColumnIndex();
-	
+
 	String getStringValue();
 }

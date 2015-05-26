@@ -43,18 +43,18 @@ public class SpreadSheetDiffer {
                 + "excel_cmp 1.xlsx 2.xlsx --ignore1 Sheet1:::A1,B1,J10,K11,D4 Sheet2:::A1 --ignore2 Sheet1:::A1,D4,J10 Sheet3:::A1" + "\n"
                 ;
     }
-    
+
     /*
      * TODO: Provide API (callbacks)
      * TODO: Add tests
      * TODO: Better display of results
      */
-    
+
     public static void main(String[] args) {
     	int ret = doDiff(args);
     	System.exit(ret);
     }
-    
+
     public static int doDiff(String[] args) {
     	int ret = -1;
     	try {
@@ -65,7 +65,7 @@ public class SpreadSheetDiffer {
     	}
     	return ret;
     }
-    
+
     public static int doDiff(String[] args, SpreadSheetDiffCallback diffCallback) throws Exception {
         if ((args.length < 2)){
             System.out.println(usage());
@@ -73,26 +73,26 @@ public class SpreadSheetDiffer {
         }
         final File file1 = new File(args[0]);
         final File file2 = new File(args[1]);
-        
+
         if (!verifyFile(file1) || !verifyFile(file2)) {
         	return -1;
         }
-        
+
         ISpreadSheet ss1 = loadSpreadSheet(file1);
         ISpreadSheet ss2 = loadSpreadSheet(file2);
-        
+
         WorkbookIgnores workbookIgnores1 = new WorkbookIgnores(args, "--ignore1");
         WorkbookIgnores workbookIgnores2 = new WorkbookIgnores(args, "--ignore2");
 
         SpreadSheetIterator ssi1 = new SpreadSheetIterator(ss1, workbookIgnores1);
         SpreadSheetIterator ssi2 = new SpreadSheetIterator(ss2, workbookIgnores2);
-        
+
         boolean isDiff = false;
         CellPos c1 = null, c2 = null;
         while (true){
             if ((c1==null) && ssi1.hasNext()) c1 = ssi1.next();
             if ((c2==null) && ssi2.hasNext()) c2 = ssi2.next();
-            
+
             if ((c1!=null) && (c2!=null)){
                 int c = c1.compareTo(c2);
                 if (c == 0){
@@ -133,12 +133,12 @@ public class SpreadSheetDiffer {
         if ((c1!=null) || (c2!=null)){
             throw new IllegalStateException("Something wrong");
         }
-        
+
         diffCallback.reportWorkbooksDiffer(isDiff, file1, file2);
-        
+
         return isDiff ? 1 : 0;
     }
-    
+
     private static boolean verifyFile(File file) {
     	if (!file.exists()) {
     		System.err.println("File: " + file + " does not exist.");
@@ -154,7 +154,7 @@ public class SpreadSheetDiffer {
     	}
     	return true;
     }
-    
+
     private static ISpreadSheet loadSpreadSheet(File file) throws Exception {
     	// assume file is excel by default
     	Exception excelReadException = null;
@@ -167,7 +167,7 @@ public class SpreadSheetDiffer {
     	Exception odfReadException = null;
     	try {
     		SpreadsheetDocument spreadsheetDocument = SpreadsheetDocument.loadDocument(file);
-    		return new SpreadSheetOdf(spreadsheetDocument);    		
+    		return new SpreadSheetOdf(spreadsheetDocument);
     	} catch (Exception e) {
     		odfReadException = e;
     	}

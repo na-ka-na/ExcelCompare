@@ -13,7 +13,7 @@ public class SpreadSheetUtils {
             return String.valueOf((char)(col + 65));
         }
     }
-    
+
     public static int convertFromLetter(String col){
         int idx=0;
         for (int i=col.length()-1, exp=0; i>=0; i--,exp++){
@@ -26,27 +26,27 @@ public class SpreadSheetUtils {
     public static String COL_INTERNAL_TO_USER(int col){
         return convertToLetter(col);
     }
-    
+
     public static int ROW_INTERNAL_TO_USER(int row){
         return row+1;
     }
-    
+
     public static String CELL_INTERNAL_TO_USER(int row, int col){
         return COL_INTERNAL_TO_USER(col) + ROW_INTERNAL_TO_USER(row);
     }
-    
-    
+
+
     // USER_TO_INTERNAL
     public static int COL_USER_TO_INTERNAL(String col){
         return convertFromLetter(col);
     }
-    
+
     public static int ROW_USER_TO_INTERNAL(int row){
         return row-1;
     }
-    
+
     public static final Pattern cellPat = Pattern.compile("([A-Z]+)(\\d+)");
-    
+
     public static int[] CELL_USER_TO_INTERNAL(String cell){
         Matcher matcher = cellPat.matcher(cell);
         if (!matcher.matches())

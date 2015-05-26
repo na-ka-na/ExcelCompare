@@ -9,12 +9,11 @@ import java.io.PrintStream;
 import javax.annotation.Nullable;
 
 public class SpreadSheetDifferSmokeTest {
-	
+
 	private static final File TEMP_DIR = new File("test/resources");
 
 	public static void main(String[] args) throws Exception {
-		
-	
+
 		//Unix path based tests
 		if ("/".equals(System.getProperty("file.separator")))	{
 			testDiff(
@@ -71,7 +70,7 @@ public class SpreadSheetDifferSmokeTest {
 					"Ignore single cell",
 					new String[]{"test/resources/ss3.xlsx", "test/resources/ss3.ods", "--ignore1", "Sheet1:2:B", "--ignore2", "Sheet1:2:B"},
 					new File("test/resources/ss3_xlsx_ss3_ignore2B_ods.out"),
-					null);				
+					null);
 		} else if ("\\".equals(System.getProperty("file.separator")))	{
 			testDiff(
 					"Identical xlsx files",
@@ -127,11 +126,11 @@ public class SpreadSheetDifferSmokeTest {
 					"Ignore single cell",
 					new String[]{"test/resources/ss3.xlsx", "test/resources/ss3.ods", "--ignore1", "Sheet1:2:B", "--ignore2", "Sheet1:2:B"},
 					new File("test/resources/win_ss3_xlsx_ss3_ignore2B_ods.out"),
-					null);		
-		} 	
+					null);
+		}
 		System.out.println("All tests pass");
 	}
-	
+
 	public static void testDiff(String testName, String[] args,
 		@Nullable File expectedOutFile, @Nullable File expectedErrFile) throws Exception {
 		PrintStream oldOut = System.out;
@@ -149,17 +148,17 @@ public class SpreadSheetDifferSmokeTest {
 				err = new PrintStream(errFile);
 				try {
 					System.setOut(out);
-					System.setErr(err);				
+					System.setErr(err);
 					SpreadSheetDiffer.doDiff(args);
 					testCompleted = true;
 				} finally {
 					System.setOut(oldOut);
-					System.setErr(oldErr);					
+					System.setErr(oldErr);
 				}
 			} finally {
 				if(err != null)	err.close();
 			}
-			
+
 		} finally {
 			if(out != null)	out.close();
 		}

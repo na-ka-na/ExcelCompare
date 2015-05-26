@@ -10,7 +10,7 @@ import org.odftoolkit.simple.table.Table;
 public class SpreadSheetOdf implements ISpreadSheet {
 
 	private final SpreadsheetDocument spreadsheetDocument;
-	
+
 	public SpreadSheetOdf(SpreadsheetDocument spreadsheetDocument) {
 		this.spreadsheetDocument = spreadsheetDocument;
 	}
@@ -18,7 +18,7 @@ public class SpreadSheetOdf implements ISpreadSheet {
 	@Override
 	public Iterator<ISheet> getSheetIterator() {
 		return new Iterator<ISheet>() {
-			
+
 			private int currSheetIdx = 0;
 
 			@Override
@@ -46,17 +46,17 @@ class SheetOdf implements ISheet {
 
 	private final Table table;
 	private final int sheetIdx;
-	
+
 	public SheetOdf(Table table, int sheetIdx) {
 		this.table = table;
 		this.sheetIdx = sheetIdx;
 	}
-	
+
 	@Override
 	public String getName() {
 		return table.getTableName();
 	}
-	
+
 	@Override
 	public int getSheetIndex() {
 		return sheetIdx;
@@ -66,7 +66,7 @@ class SheetOdf implements ISheet {
 	public Iterator<IRow> getRowIterator() {
 		final Iterator<Row> rowIterator = table.getRowIterator();
 		return new Iterator<IRow>() {
-			
+
 			@Override
 			public boolean hasNext() {
 				return rowIterator.hasNext();
@@ -88,11 +88,11 @@ class SheetOdf implements ISheet {
 class RowOdf implements IRow {
 
 	private final Row row;
-	
+
 	public RowOdf(Row row) {
 		this.row = row;
 	}
-	
+
 	@Override
 	public int getRowIndex() {
 		return row.getRowIndex();
@@ -123,9 +123,9 @@ class RowOdf implements IRow {
 }
 
 class CellOdf implements ICell {
-	
+
 	private final Cell cell;
-	
+
 	public CellOdf(Cell cell) {
 		this.cell = cell;
 	}

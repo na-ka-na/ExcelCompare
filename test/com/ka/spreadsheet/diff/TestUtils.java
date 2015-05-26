@@ -29,7 +29,7 @@ public class TestUtils {
 			assertEquals("Line " + lineNum + " differs", actualLine, expectedLine);
 		}
 	}
-	
+
 	public static LinkedList<String> readFileIntoLines(File file) throws IOException {
 		LinkedList<String> lines = new LinkedList<String>();
 		BufferedReader reader = new BufferedReader(new FileReader(file));
@@ -44,11 +44,11 @@ public class TestUtils {
 		}
 		return lines;
 	}
-	
+
 	public static void assertEquals(Object actual, Object expected) {
 		assertEquals("assertEquals failed", actual, expected);
 	}
-	
+
 	public static void assertEquals(String messagePrefix, Object actual, Object expected) {
 		if (((actual == null && expected != null) || (actual != null && expected == null)) || !actual.equals(expected)) {
 			throw new AssertionError(
@@ -57,15 +57,15 @@ public class TestUtils {
 				+ "\nexpected: " + expected);
 		}
 	}
-	
+
 	public static void assertTrue(boolean expected) {
 		assertEquals("assertTrue failed", true, expected);
 	}
-	
+
 	public static void assertFalse(boolean expected) {
 		assertEquals("assertFalse failed", false, expected);
 	}
-	
+
 	public static void fail() {
 		throw new AssertionError();
 	}

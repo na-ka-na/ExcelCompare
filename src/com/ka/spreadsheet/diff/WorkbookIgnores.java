@@ -7,17 +7,17 @@ import javax.annotation.Nullable;
 
 public class WorkbookIgnores {
 	private Map<String,SheetIgnores> ignore;
-	
+
 	public WorkbookIgnores(String[] args, String opt) {
 		ignore = parseSheetIgnores(args, opt);
 	}
-	
+
 	public @Nullable SheetIgnores fetchSheetIgnores(String sheetName) {
 		SheetIgnores ignoredByName = ignore.get(sheetName);
 		SheetIgnores ignoredAll = ignore.get("");
 		return ignoredByName != null ? ignoredByName : ((ignoredAll != null) ? ignoredAll : null );
 	}
-	
+
 	private Map<String,SheetIgnores> parseSheetIgnores(String[] args, String opt){
 		int start = -1, end = -1;
 		for (int i=0; i<args.length; i++){

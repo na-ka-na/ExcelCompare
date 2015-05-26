@@ -1,29 +1,29 @@
 package com.ka.spreadsheet.diff;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import static com.ka.spreadsheet.diff.SpreadSheetUtils.CELL_USER_TO_INTERNAL;
 import static com.ka.spreadsheet.diff.SpreadSheetUtils.COL_USER_TO_INTERNAL;
 import static com.ka.spreadsheet.diff.SpreadSheetUtils.ROW_USER_TO_INTERNAL;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class SheetIgnores {
-    
+
     private static class Range {
-    	
+
     	private final int[] low;
         private final int[] high;
-        
+
         Range(int low, int high){
             this.low = new int[]{low};
             this.high = new int[]{high};
         }
-        
+
         Range(int low1, int low2, int high1, int high2){
             this.low = new int[]{low1, low2};
             this.high = new int[]{high1, high2};
         }
-        
+
         boolean lies_between(int ... x){
             for (int i=0; i<x.length; i++){
                 if (!((low[i] <= x[i]) && (x[i] <= high[i])))
@@ -41,27 +41,27 @@ public class SheetIgnores {
     private List<Range> rowIgnores;
     private List<Range> colIgnores;
     private List<Range> cellIgnores;
-    
+
     public String sheetName(){
         return sheetName;
     }
-    
+
     public boolean isWholeSheetIgnored(){
         return completeIgnore;
     }
-    
+
     public boolean isRowIgnored(int row){
         return rowIgnoresPresent && isIgnored(rowIgnores, row);
     }
-    
+
     public boolean isColIgnored(int col){
         return colIgnoresPresent && isIgnored(colIgnores, col);
     }
-    
+
     public boolean isCellIgnored(int row, int col){
         return cellIgnoresPresent && isIgnored(cellIgnores, row, col);
     }
-    
+
     public boolean isIgnored(List<Range> rngs, int ... pt){
         for (Range r : rngs){
             if (r.lies_between(pt))
@@ -69,11 +69,11 @@ public class SheetIgnores {
         }
         return false;
     }
-    
+
     public static SheetIgnores newSheetIgnore(String val){
         return new SheetIgnores().parse(val);
     }
-    
+
     // Assume val is not null & non-empty
     private SheetIgnores parse(String val){
         String[] parts = val.split(":");
@@ -95,7 +95,7 @@ public class SheetIgnores {
             throw new IllegalArgumentException("Illegal Sheet Ignores argument " + val);
         return this;
     }
-    
+
     private static List<Range> formRowIgnores(String val){
         List<Range> ret = new ArrayList<Range>();
         if (val != null){
@@ -115,7 +115,7 @@ public class SheetIgnores {
         }
         return ret;
     }
-    
+
     private static List<Range> formColIgnores(String val){
         List<Range> ret = new ArrayList<Range>();
         if (val != null){
@@ -135,7 +135,7 @@ public class SheetIgnores {
         }
         return ret;
     }
-    
+
     private static List<Range> formCellIgnores(String val){
         List<Range> ret = new ArrayList<Range>();
         if (val != null){
