@@ -1,6 +1,8 @@
 Release
 -------
 # Note: set jdk to <= 6 before following
+# mkdir ivy/, download ivy.jar into ivy/
+# ant deps
 > ant clean test
 > ant clean build
 # This will create the release zip
