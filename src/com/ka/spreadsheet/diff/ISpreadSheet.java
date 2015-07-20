@@ -9,33 +9,36 @@ import javax.annotation.Nullable;
  */
 public interface ISpreadSheet {
 
-	Iterator<ISheet> getSheetIterator();
+  Iterator<ISheet> getSheetIterator();
 
-	@Nullable
-	Boolean hasMacro();
+  @Nullable
+  Boolean hasMacro();
 }
+
 
 interface ISheet {
 
-	String getName();
+  String getName();
 
-	int getSheetIndex();
+  int getSheetIndex();
 
-	Iterator<IRow> getRowIterator();
+  Iterator<IRow> getRowIterator();
 }
+
 
 interface IRow {
 
-	int getRowIndex();
+  int getRowIndex();
 
-	Iterator<ICell> getCellIterator();
+  Iterator<ICell> getCellIterator();
 }
+
 
 interface ICell {
 
-	int getRowIndex();
+  int getRowIndex();
 
-	int getColumnIndex();
+  int getColumnIndex();
 
-	String getStringValue();
+  String getStringValue();
 }
