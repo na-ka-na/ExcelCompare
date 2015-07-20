@@ -80,6 +80,19 @@ public class SpreadSheetDifferSmokeTest {
               "test/resources/ss_without_macro.xlsx"},
           new File("test/resources/macro_diff.out"),
           null);
+      testDiff(
+          "Numeric precision diff without flag",
+          new String[] {"test/resources/ss1_numeric_precision.xlsx",
+              "test/resources/ss2_numeric_precision.xlsx"},
+          new File("test/resources/numeric_precision_diff.out"),
+          null);
+      testDiff(
+          "Numeric precision diff with flag",
+          new String[] {"--diff_numeric_precision=0.0000001",
+              "test/resources/ss1_numeric_precision.xlsx",
+              "test/resources/ss2_numeric_precision.xlsx"},
+          new File("test/resources/numeric_precision_no_diff.out"),
+          null);
     } else if ("\\".equals(System.getProperty("file.separator"))) {
       testDiff(
           "Identical xlsx files",
@@ -145,6 +158,19 @@ public class SpreadSheetDifferSmokeTest {
           new String[] {"test/resources/ss_with_macro.xlsm",
               "test/resources/ss_without_macro.xlsx"},
           new File("test/resources/win_macro_diff.out"),
+          null);
+      testDiff(
+          "Numeric precision diff without flag",
+          new String[] {"test/resources/ss1_numeric_precision.xlsx",
+              "test/resources/ss2_numeric_precision.xlsx"},
+          new File("test/resources/win_numeric_precision_diff.out"),
+          null);
+      testDiff(
+          "Numeric precision diff with flag",
+          new String[] {"--diff_numeric_precision=0.0000001",
+              "test/resources/ss1_numeric_precision.xlsx",
+              "test/resources/ss2_numeric_precision.xlsx"},
+          new File("test/resources/win_numeric_precision_no_diff.out"),
           null);
     }
     System.out.println("All tests pass");

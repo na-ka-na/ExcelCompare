@@ -40,5 +40,5 @@ interface ICell {
 
   int getColumnIndex();
 
-  String getStringValue();
+  Object getValue();
 }

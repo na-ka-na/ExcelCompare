@@ -152,7 +152,7 @@ class CellOdf implements ICell {
   }
 
   @Override
-  public String getStringValue() {
+  public Object getValue() {
     String formula = cell.getFormula();
     if (formula != null) {
       return formula;
@@ -160,9 +160,9 @@ class CellOdf implements ICell {
     String valueType = cell.getValueType();
     if (valueType != null) {
       if (valueType.equals("float")) {
-        return String.valueOf(cell.getDoubleValue());
+        return cell.getDoubleValue();
       } else if (valueType.equals("boolean")) {
-        return String.valueOf(cell.getBooleanValue());
+        return cell.getBooleanValue();
       }
     }
     return cell.getStringValue();

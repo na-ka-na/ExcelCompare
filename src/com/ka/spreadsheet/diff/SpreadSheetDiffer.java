@@ -9,6 +9,9 @@ import org.odftoolkit.simple.SpreadsheetDocument;
 
 public class SpreadSheetDiffer {
 
+  // double value, default null
+  private static final String DIFF_NUMERIC_PRECISION_FLAG = "--diff_numeric_precision";
+
   static String usage() {
     return "Usage> excel_cmp <file1> <file2> [--ignore1 <sheet-ignore-spec> <sheet-ignore-spec> ..] [--ignore2 <sheet-ignore-spec> <sheet-ignore-spec> ..]"
         + "\n"
@@ -95,6 +98,13 @@ public class SpreadSheetDiffer {
       System.out.println(usage());
       return -1;
     }
+    Double diffNumericPrecision = null;
+    int idx = findFlag(DIFF_NUMERIC_PRECISION_FLAG, args);
+    if (idx != -1) {
+      diffNumericPrecision = parseDoubleFlagValue(idx, args);
+      args = removeFlag(idx, args);
+    }
+
     final File file1 = new File(args[0]);
     final File file2 = new File(args[1]);
 
@@ -120,9 +130,9 @@ public class SpreadSheetDiffer {
         c2 = ssi2.next();
 
       if ((c1 != null) && (c2 != null)) {
-        int c = c1.compareTo(c2);
+        int c = c1.compareCellPositions(c2);
         if (c == 0) {
-          if (!c1.getStringValue().equals(c2.getStringValue())) {
+          if (!compareCellValues(c1.getCellValue(), c2.getCellValue(), diffNumericPrecision)) {
             isDiff = true;
             diffCallback.reportDiffCell(c1, c2);
           }
@@ -169,6 +179,28 @@ public class SpreadSheetDiffer {
     return isDiff ? 1 : 0;
   }
 
+  private static boolean compareCellValues(Object val1, Object val2, Double diffNumericPrecision) {
+    if ((val1 == null) && (val2 == null)) {
+      return true;
+    } else if (((val1 == null) && (val2 != null)) || ((val1 != null) && (val2 == null))) {
+      return false;
+    } else {
+      if (val1.equals(val2)) {
+        return true;
+      } else {
+        if ((val1 instanceof Double) && (val2 instanceof Double)) {
+          if (diffNumericPrecision == null) {
+            return false;
+          } else {
+            return Math.abs((Double) val1 - (Double) val2) < diffNumericPrecision;
+          }
+        } else {
+          return false;
+        }
+      }
+    }
+  }
+
   private static boolean verifyFile(File file) {
     if (!file.exists()) {
       System.err.println("File: " + file + " does not exist.");
@@ -206,5 +238,28 @@ public class SpreadSheetDiffer {
     } else {
       throw new RuntimeException("Failed to read as excel file: " + file, excelReadException);
     }
+  }
+
+  private static int findFlag(String flag, String[] args) {
+    for (int i = 0; i < args.length; i++) {
+      if (args[i].startsWith(flag + "=")) {
+        return i;
+      }
+    }
+    return -1;
+  }
+
+  private static double parseDoubleFlagValue(int flagIdx, String[] args) {
+    String flag = args[flagIdx];
+    return Double.parseDouble(flag.substring(flag.indexOf("=") + 1, flag.length()));
+  }
+
+  private static String[] removeFlag(int flagIdx, String[] args) {
+    String[] args1 = new String[args.length - 1];
+    for (int i = 0; i < flagIdx; i++)
+      args1[i] = args[i];
+    for (int i = flagIdx + 1; i < args.length; i++)
+      args1[i - 1] = args[i];
+    return args1;
   }
 }

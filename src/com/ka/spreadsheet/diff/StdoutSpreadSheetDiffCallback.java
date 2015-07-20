@@ -51,7 +51,7 @@ public class StdoutSpreadSheetDiffCallback implements SpreadSheetDiffCallback {
       cols2.add(c.getColumn());
     }
     System.out.println("EXTRA Cell in " + wb(inFirstSpreadSheet) + " " + c.getCellPosition()
-        + " => '" + c.getStringValue() + "'");
+        + " => '" + c.getCellValue() + "'");
   }
 
   @Override
@@ -59,8 +59,8 @@ public class StdoutSpreadSheetDiffCallback implements SpreadSheetDiffCallback {
     sheets.add(c1.getSheetName());
     rows.add(c1.getRow());
     cols.add(c1.getColumn());
-    System.out.println("DIFF  Cell at     " + c1.getCellPosition() + " => '" + c1.getStringValue()
-        + "' v/s '" + c2.getStringValue() + "'");
+    System.out.println("DIFF  Cell at     " + c1.getCellPosition() + " => '" + c1.getCellValue()
+        + "' v/s '" + c2.getCellValue() + "'");
   }
 
   private void reportSummary(String what, Set<Object> sheets, Set<Object> rows, Set<Object> cols,

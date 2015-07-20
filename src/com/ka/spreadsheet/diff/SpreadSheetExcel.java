@@ -163,13 +163,13 @@ class CellExcel implements ICell {
   }
 
   @Override
-  public String getStringValue() {
+  public Object getValue() {
     int cellType = cell.getCellType();
     switch (cellType) {
       case Cell.CELL_TYPE_NUMERIC:
-        return String.valueOf(cell.getNumericCellValue());
+        return cell.getNumericCellValue();
       case Cell.CELL_TYPE_BOOLEAN:
-        return String.valueOf(cell.getBooleanCellValue());
+        return cell.getBooleanCellValue();
       case Cell.CELL_TYPE_BLANK:
       case Cell.CELL_TYPE_STRING:
         return cell.getStringCellValue();
