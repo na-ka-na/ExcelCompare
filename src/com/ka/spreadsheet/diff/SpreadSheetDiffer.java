@@ -9,6 +9,7 @@ import org.odftoolkit.simple.SpreadsheetDocument;
 
 public class SpreadSheetDiffer {
 
+  private static final String DEBUG = "--debug";
   // double value, default null
   private static final String DIFF_NUMERIC_PRECISION_FLAG = "--diff_numeric_precision";
 
@@ -83,6 +84,8 @@ public class SpreadSheetDiffer {
    * TODO: Provide API (callbacks) TODO: Add tests TODO: Better display of results
    */
 
+  public static boolean debug = false;
+
   public static void main(String[] args) {
     int ret = doDiff(args);
     System.exit(ret);
@@ -91,10 +94,18 @@ public class SpreadSheetDiffer {
   public static int doDiff(String[] args) {
     int ret = -1;
     try {
+      int idx = findFlag(DEBUG, args);
+      if (idx != -1) {
+        debug = true;
+        args = removeFlag(idx, args);
+      }
       ret = doDiff(args, new StdoutSpreadSheetDiffCallback());
     } catch (Exception e) {
-      // e.printStackTrace(System.err);
-      System.err.println("Diff failed: " + e.getMessage());
+      if (debug) {
+        e.printStackTrace(System.err);
+      } else {
+        System.err.println("Diff failed: " + e.getMessage());
+      }
     }
     return ret;
   }
@@ -248,9 +259,8 @@ public class SpreadSheetDiffer {
 
   private static int findFlag(String flag, String[] args) {
     for (int i = 0; i < args.length; i++) {
-      if (args[i].startsWith(flag + "=")) {
+      if (args[i].startsWith(flag))
         return i;
-      }
     }
     return -1;
   }
