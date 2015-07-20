@@ -1,0 +1,16 @@
+EXTRA macro name: unknown found only in WB1
+----------------- DIFF -------------------
+Sheets: []
+Rows: []
+Cols: []
+----------------- EXTRA WB1 -------------------
+Sheets: []
+Rows: []
+Cols: []
+Macros: [unknown]
+----------------- EXTRA WB2 -------------------
+Sheets: []
+Rows: []
+Cols: []
+-----------------------------------------
+Excel files test\resources\ss_with_macro.xlsm and test\resources\ss_without_macro.xlsx differ
