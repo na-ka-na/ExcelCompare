@@ -2,6 +2,8 @@ package com.ka.spreadsheet.diff;
 
 import java.util.Iterator;
 
+import javax.annotation.Nullable;
+
 import org.odftoolkit.simple.SpreadsheetDocument;
 import org.odftoolkit.simple.table.Cell;
 import org.odftoolkit.simple.table.Row;
@@ -39,6 +41,12 @@ public class SpreadSheetOdf implements ISpreadSheet {
 				throw new UnsupportedOperationException();
 			}
 		};
+	}
+
+	@Override
+	@Nullable
+	public Boolean hasMacro() {
+		return null;
 	}
 }
 

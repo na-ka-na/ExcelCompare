@@ -8,5 +8,7 @@ public interface SpreadSheetDiffCallback {
 
     void reportExtraCell(boolean inFirstSpreadSheet, CellPos c);
 
+    void reportMacroOnlyIn(boolean inFirstSpreadSheet);
+
     void reportWorkbooksDiffer(boolean differ, File file1, File file2);
 }

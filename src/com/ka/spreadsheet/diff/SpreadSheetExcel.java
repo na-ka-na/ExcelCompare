@@ -2,10 +2,14 @@ package com.ka.spreadsheet.diff;
 
 import java.util.Iterator;
 
+import javax.annotation.Nullable;
+
+import org.apache.poi.POIXMLDocumentPart;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 public class SpreadSheetExcel implements ISpreadSheet {
 
@@ -39,6 +43,22 @@ public class SpreadSheetExcel implements ISpreadSheet {
 				throw new UnsupportedOperationException();
 			}
 		};
+	}
+
+	@Override
+	@Nullable
+	public Boolean hasMacro() {
+		if (workbook instanceof XSSFWorkbook) {
+			for (POIXMLDocumentPart p : ((XSSFWorkbook) workbook).getRelations()) {
+				if ((p.getPackageRelationship() != null)
+						&& (p.getPackageRelationship().getTargetURI() != null)
+						&& (p.getPackageRelationship().getTargetURI().toString().contains("vbaProject"))) {
+					return true;
+				}
+			}
+			return false;
+		}
+		return null;
 	}
 }
 

@@ -134,6 +134,13 @@ public class SpreadSheetDiffer {
             throw new IllegalStateException("Something wrong");
         }
 
+        Boolean hasMacro1 = ss1.hasMacro();
+        Boolean hasMacro2 = ss2.hasMacro();
+        if ((hasMacro1 != null) && (hasMacro2 != null) && (hasMacro1 != hasMacro2)) {
+        	isDiff = true;
+        	diffCallback.reportMacroOnlyIn(hasMacro1);
+        }
+
         diffCallback.reportWorkbooksDiffer(isDiff, file1, file2);
 
         return isDiff ? 1 : 0;
