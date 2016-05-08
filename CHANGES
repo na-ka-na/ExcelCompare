@@ -1,3 +1,9 @@
+Version 0.6.0 to 0.5.1
+--------------------
+1. Added a --diff_ignore_formulas flag.
+2. Breaking change in how cells with formulas are diffed: If cell1 has formula, cell2 doesn't mark them not equal (unless --diff_ignore_formulas is set, then we compare values instead).
+3. Better support for using excel_cmp with git diff.
+
 Version 0.5.1 to 0.5.0
 --------------------
 1. Added a --debug flag
