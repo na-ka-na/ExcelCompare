@@ -222,7 +222,8 @@ public class SpreadSheetDiffer {
   }
 
   private static boolean isDevNull(File file) {
-    return "/dev/null".equals(file.getAbsolutePath());
+    return "/dev/null".equals(file.getAbsolutePath())
+        || "\\\\.\\NUL".equals(file.getAbsolutePath());
   }
 
   private static boolean verifyFile(File file) {
