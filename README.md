@@ -41,6 +41,7 @@ Notes:
 * --ignore1 (file1) and --ignore2 (file2) are independent of each other
 * Give one and only one &lt;sheet-ignore-spec> per sheet
 * File path is assumed relative to current directory unless full path is provided
+* file1 and/or file2 can be '/dev/null' which is treated as empty file. This is useful for using ExcelCompare for git diff.
 
 ### Sheet Ignore Spec
     <sheet-name>:<row-ignore-spec>:<column-ignore-spec>:<cell-ignore-spec>

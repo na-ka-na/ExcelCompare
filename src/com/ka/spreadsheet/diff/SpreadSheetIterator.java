@@ -2,7 +2,7 @@ package com.ka.spreadsheet.diff;
 
 import java.util.Iterator;
 
-public class SpreadSheetIterator {
+public class SpreadSheetIterator implements ISpreadSheetIterator {
 
   private final Iterator<ISheet> sheetIterator;
   private ISheet sheet;
@@ -19,7 +19,8 @@ public class SpreadSheetIterator {
     this.sheetIterator = spreadSheet.getSheetIterator();
   }
 
-  boolean hasNext() {
+  @Override
+  public boolean hasNext() {
     if (!seenNext) {
       nextCell = null;
       seenNext = true;
@@ -65,6 +66,7 @@ public class SpreadSheetIterator {
         && (currSheetIgnores.isCellIgnored(cell.getRowIndex(), cell.getColumnIndex()));
   }
 
+  @Override
   public CellPos next() {
     seenNext = false;
     return new CellPos(sheet, nextCell);

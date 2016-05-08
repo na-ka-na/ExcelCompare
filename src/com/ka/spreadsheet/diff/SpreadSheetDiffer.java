@@ -1,6 +1,7 @@
 package com.ka.spreadsheet.diff;
 
 import java.io.File;
+import java.util.Iterator;
 
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.ss.usermodel.WorkbookFactory;
@@ -122,21 +123,23 @@ public class SpreadSheetDiffer {
       args = removeFlag(idx, args);
     }
 
-    final File file1 = new File(args[0]);
-    final File file2 = new File(args[1]);
+    File file1 = new File(args[0]);
+    File file2 = new File(args[1]);
 
     if (!verifyFile(file1) || !verifyFile(file2)) {
       return -1;
     }
 
-    ISpreadSheet ss1 = loadSpreadSheet(file1);
-    ISpreadSheet ss2 = loadSpreadSheet(file2);
-
     WorkbookIgnores workbookIgnores1 = new WorkbookIgnores(args, "--ignore1");
     WorkbookIgnores workbookIgnores2 = new WorkbookIgnores(args, "--ignore2");
 
-    SpreadSheetIterator ssi1 = new SpreadSheetIterator(ss1, workbookIgnores1);
-    SpreadSheetIterator ssi2 = new SpreadSheetIterator(ss2, workbookIgnores2);
+    ISpreadSheet ss1 = isDevNull(file1) ? emptySpreadSheet() : loadSpreadSheet(file1);
+    ISpreadSheet ss2 = isDevNull(file2) ? emptySpreadSheet() : loadSpreadSheet(file2);
+
+    ISpreadSheetIterator ssi1 = isDevNull(file1) ?
+        emptySpreadSheetIterator() : new SpreadSheetIterator(ss1, workbookIgnores1);
+    ISpreadSheetIterator ssi2 = isDevNull(file2) ?
+        emptySpreadSheetIterator() : new SpreadSheetIterator(ss2, workbookIgnores2);
 
     boolean isDiff = false;
     CellPos c1 = null, c2 = null;
@@ -218,7 +221,14 @@ public class SpreadSheetDiffer {
     }
   }
 
+  private static boolean isDevNull(File file) {
+    return "/dev/null".equals(file.getAbsolutePath());
+  }
+
   private static boolean verifyFile(File file) {
+    if (isDevNull(file)) {
+      return true;
+    }
     if (!file.exists()) {
       System.err.println("File: " + file + " does not exist.");
       return false;
@@ -255,6 +265,45 @@ public class SpreadSheetDiffer {
     } else {
       throw new RuntimeException("Failed to read as excel file: " + file, excelReadException);
     }
+  }
+
+  private static ISpreadSheet emptySpreadSheet() {
+    return new ISpreadSheet() {
+      @Override
+      public Boolean hasMacro() {
+        return false;
+      }
+      @Override
+      public Iterator<ISheet> getSheetIterator() {
+        return new Iterator<ISheet>() {
+          @Override
+          public boolean hasNext() {
+            return false;
+          }
+          @Override
+          public ISheet next() {
+            throw new IllegalStateException();
+          }
+          @Override
+          public void remove() {
+            throw new IllegalStateException();
+          }
+        };
+      }
+    };
+  }
+
+  private static ISpreadSheetIterator emptySpreadSheetIterator() {
+    return new ISpreadSheetIterator() {
+      @Override
+      public boolean hasNext() {
+        return false;
+      }
+      @Override
+      public CellPos next() {
+        throw new IllegalStateException();
+      }
+    };
   }
 
   private static int findFlag(String flag, String[] args) {

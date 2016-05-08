@@ -12,6 +12,8 @@ public class SpreadSheetDifferSmokeTest {
 
   private static final File TEMP_DIR = new File("test/resources");
 
+  private static final boolean isWindows = "\\".equals(System.getProperty("file.separator"));
+
   public static void main(String[] args) throws Exception {
     testDiff(
         "Identical xlsx files",
@@ -91,12 +93,24 @@ public class SpreadSheetDifferSmokeTest {
             "test/resources/ss2_numeric_precision.xlsx"},
         resultFile("test/resources/numeric_precision_no_diff.out"),
         null);
+    if (!isWindows) {
+      testDiff(
+          "File1 is /dev/null",
+          new String[] {"test/resources/ss1.xlsx", "/dev/null"},
+          resultFile("test/resources/ss1_xlsx_dev_null.out"),
+          null);
+      testDiff(
+          "File2 is /dev/null",
+          new String[] {"/dev/null", "test/resources/ss1.xlsx"},
+          resultFile("test/resources/dev_null_ss1_xlsx.out"),
+          null);
+    }
+
     System.out.println("All tests pass");
   }
 
   private static File resultFile(String resultFile) {
-    return new File("\\".equals(System.getProperty("file.separator"))
-        ? ("win_" + resultFile) : resultFile);
+    return new File(isWindows ? ("win_" + resultFile) : resultFile);
   }
 
   public static void testDiff(String testName, String[] args, @Nullable File expectedOutFile,

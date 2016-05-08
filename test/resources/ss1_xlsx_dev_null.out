@@ -1,0 +1,17 @@
+EXTRA Cell in WB1 Sheet1!A1 => 'a1'
+EXTRA Cell in WB1 Sheet1!B2 => 'b2'
+EXTRA Cell in WB1 Sheet1!C3 => 'c3'
+----------------- DIFF -------------------
+Sheets: []
+Rows: []
+Cols: []
+----------------- EXTRA WB1 -------------------
+Sheets: [Sheet1]
+Rows: [1, 2, 3]
+Cols: [A, B, C]
+----------------- EXTRA WB2 -------------------
+Sheets: []
+Rows: []
+Cols: []
+-----------------------------------------
+Excel files test/resources/ss1.xlsx and /dev/null differ
