@@ -63,6 +63,13 @@ public class SpreadSheetDifferSmokeTest {
         resultFile("test/resources/numeric_and_formula.xls.ods.out"),
         null);
     testDiff(
+        "Numeric and formula odf xlsx with flag",
+        new String[] {"--diff_ignore_formulas",
+                      "test/resources/numeric_and_formula.ods",
+                      "test/resources/numeric_and_formula.xlsx"},
+        resultFile("test/resources/numeric_and_formula_ignoreformulaflag.ods.xlsx.out"),
+        null);
+    testDiff(
         "Nullable Sheet",
         new String[] {"test/resources/MultiSheet.xls", "test/resources/MultiSheet.xls",
             "--ignore1", "::B", "--ignore2", "::B"},
@@ -105,8 +112,20 @@ public class SpreadSheetDifferSmokeTest {
           resultFile("test/resources/dev_null_ss1_xlsx.out"),
           null);
     }
-
-    System.out.println("All tests pass");
+    testDiff(
+        "With without formula with flag",
+        new String[] {"--diff_ignore_formulas",
+                      "test/resources/ss_without_formula.xlsx",
+                      "test/resources/ss_with_formula.xlsx"},
+        resultFile("test/resources/ss_with_without_formula_ignoreformulaflag.out"),
+        null);
+    testDiff(
+        "With without formula without flag",
+        new String[] {"test/resources/ss_without_formula.xlsx",
+                      "test/resources/ss_with_formula.xlsx"},
+        resultFile("test/resources/ss_with_without_formula.out"),
+        null);
+    System.err.println("All tests pass");
   }
 
   private static File resultFile(String resultFile) {
@@ -115,6 +134,7 @@ public class SpreadSheetDifferSmokeTest {
 
   public static void testDiff(String testName, String[] args, @Nullable File expectedOutFile,
       @Nullable File expectedErrFile) throws Exception {
+    System.err.print(testName + "... ");
     PrintStream oldOut = System.out;
     PrintStream oldErr = System.err;
     File outFile = File.createTempFile("testOutput", "out", TEMP_DIR);
@@ -149,6 +169,6 @@ public class SpreadSheetDifferSmokeTest {
     assertTrue(testCompleted);
     verifyFileContentsSame(errFile, expectedErrFile);
     verifyFileContentsSame(outFile, expectedOutFile);
-    System.out.println(testName + " passed");
+    System.err.println("passed");
   }
 }

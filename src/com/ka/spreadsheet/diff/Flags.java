@@ -7,15 +7,25 @@ public class Flags {
   private static final String DEBUG_FLAG = "--debug";
   // double value, default null
   private static final String DIFF_NUMERIC_PRECISION_FLAG = "--diff_numeric_precision";
+  // no value, default absent
+  private static final String DIFF_IGNORE_FORMULAS_FLAG = "--diff_ignore_formulas";
 
-  public static boolean DEBUG = false;
-  public static Double DIFF_NUMERIC_PRECISION = null;
-  public static File WORKBOOK1 = null;
-  public static File WORKBOOK2 = null;
-  public static WorkbookIgnores WORKBOOK_IGNORES1 = null;
-  public static WorkbookIgnores WORKBOOK_IGNORES2 = null;
+  public static boolean DEBUG;
+  public static Double DIFF_NUMERIC_PRECISION;
+  public static boolean DIFF_IGNORE_FORMULAS;
+  public static File WORKBOOK1;
+  public static File WORKBOOK2;
+  public static WorkbookIgnores WORKBOOK_IGNORES1;
+  public static WorkbookIgnores WORKBOOK_IGNORES2;
 
   public static boolean parseFlags(String[] args) {
+    DEBUG = false;
+    DIFF_NUMERIC_PRECISION = null;
+    DIFF_IGNORE_FORMULAS = false;
+    WORKBOOK1 = null;
+    WORKBOOK2 = null;
+    WORKBOOK_IGNORES1 = null;
+    WORKBOOK_IGNORES2 = null;
     int idx = findFlag(DEBUG_FLAG, args);
     if (idx != -1) {
       DEBUG = true;
@@ -24,6 +34,11 @@ public class Flags {
     idx = findFlag(DIFF_NUMERIC_PRECISION_FLAG, args);
     if (idx != -1) {
       DIFF_NUMERIC_PRECISION = parseDoubleFlagValue(idx, args);
+      args = removeFlag(idx, args);
+    }
+    idx = findFlag(DIFF_IGNORE_FORMULAS_FLAG, args);
+    if (idx != -1) {
+      DIFF_IGNORE_FORMULAS = true;
       args = removeFlag(idx, args);
     }
     if (args.length < 2) {
@@ -80,6 +95,8 @@ public class Flags {
         + "Diff flags"
         + "\n"
         + "       * --diff_numeric_precision: by default numbers are diffed with double precision, to change that specify this flag as --diff_numeric_precision=0.0001"
+        + "\n"
+        + "       * --diff_ignore_formulas: by default for cells with formula, formula is compared instead of the evaluated value. Use this flag to compare evaluated value instead"
         + "\n"
         + "\n"
         + "Sheet Ignore Spec:  <sheet-name>:<row-ignore-spec>:<column-ignore-spec>:<cell-ignore-spec>"

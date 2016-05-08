@@ -154,7 +154,7 @@ class CellOdf implements ICell {
   @Override
   public Object getValue() {
     String formula = cell.getFormula();
-    if (formula != null) {
+    if ((formula != null) && !Flags.DIFF_IGNORE_FORMULAS) {
       return formula;
     }
     String valueType = cell.getValueType();

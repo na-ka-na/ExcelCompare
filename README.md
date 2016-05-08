@@ -15,7 +15,8 @@ This software is distributed under the [MIT](http://www.opensource.org/licenses/
 * Works with xls, xlsx, xlsm, ods. You may compare any of these with each other.
 * Compares only cell "contents". Formatting, macros are currently ignored.
 * Using --ignore1 & --ignore2 (both optional) you may tell the diff to skip any number of sheets / rows / columns / cells.
-* Use --diff_numeric_precision=0.01 to control diffs of numbers.
+* --diff_numeric_precision: by default numbers are diffed with double precision, to change that specify this flag as --diff_numeric_precision=0.0001
+* --diff_ignore_formulas: by default for cells with formula, formula is compared instead of the evaluated value. Use this flag to compare evaluated value instead
 
 Report bugs / issues / requests [here](https://github.com/na-ka-na/ExcelCompare/issues)
 

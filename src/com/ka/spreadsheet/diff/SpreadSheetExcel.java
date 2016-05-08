@@ -165,6 +165,13 @@ class CellExcel implements ICell {
   @Override
   public Object getValue() {
     int cellType = cell.getCellType();
+    if (cellType == Cell.CELL_TYPE_FORMULA) {
+      if (!Flags.DIFF_IGNORE_FORMULAS) {
+        return cell.getCellFormula();
+      } else {
+        cellType = cell.getCachedFormulaResultType();
+      }
+    }
     switch (cellType) {
       case Cell.CELL_TYPE_NUMERIC:
         return cell.getNumericCellValue();
@@ -173,8 +180,6 @@ class CellExcel implements ICell {
       case Cell.CELL_TYPE_BLANK:
       case Cell.CELL_TYPE_STRING:
         return cell.getStringCellValue();
-      case Cell.CELL_TYPE_FORMULA:
-        return cell.getCellFormula();
       case Cell.CELL_TYPE_ERROR:
         return String.valueOf(cell.getErrorCellValue());
     }
