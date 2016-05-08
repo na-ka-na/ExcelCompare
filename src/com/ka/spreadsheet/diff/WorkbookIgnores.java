@@ -6,19 +6,19 @@ import java.util.Map;
 import javax.annotation.Nullable;
 
 public class WorkbookIgnores {
-  private Map<String, SheetIgnores> ignore;
+  private Map<String, SheetIgnores> ignores;
 
-  public WorkbookIgnores(String[] args, String opt) {
-    ignore = parseSheetIgnores(args, opt);
+  public WorkbookIgnores(Map<String, SheetIgnores> ignores) {
+    this.ignores = ignores;
   }
 
   public @Nullable SheetIgnores fetchSheetIgnores(String sheetName) {
-    SheetIgnores ignoredByName = ignore.get(sheetName);
-    SheetIgnores ignoredAll = ignore.get("");
+    SheetIgnores ignoredByName = ignores.get(sheetName);
+    SheetIgnores ignoredAll = ignores.get("");
     return ignoredByName != null ? ignoredByName : ((ignoredAll != null) ? ignoredAll : null);
   }
 
-  private Map<String, SheetIgnores> parseSheetIgnores(String[] args, String opt) {
+  public static WorkbookIgnores parseWorkbookIgnores(String[] args, String opt) {
     int start = -1, end = -1;
     for (int i = 0; i < args.length; i++) {
       if (start == -1) {
@@ -41,6 +41,6 @@ public class WorkbookIgnores {
         ret.put(s.sheetName(), s);
       }
     }
-    return ret;
+    return new WorkbookIgnores(ret);
   }
 }
