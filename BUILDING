@@ -1,7 +1,8 @@
 Release
 -------
 # Note: set jdk to <= 6 before following
-# mkdir ivy/, download ivy.jar into ivy/
+# On Mac install jdk6 from https://support.apple.com/kb/DL1572, then export JAVA_HOME=$(/usr/libexec/java_home -v 1.6)
+# Install ant with ivy, or mkdir ivy/, download ivy.jar into ivy/
 # ant deps
 > ant clean test
 > ant clean build
