@@ -35,7 +35,7 @@ public class CellPos {
     return getCellPosition() + " => " + cell.toString();
   }
 
-  public Object getCellValue() {
+  public CellValue getCellValue() {
     return cell.getValue();
   }
 

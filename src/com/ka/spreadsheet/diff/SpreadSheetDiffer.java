@@ -58,7 +58,7 @@ public class SpreadSheetDiffer {
       if ((c1 != null) && (c2 != null)) {
         int c = c1.compareCellPositions(c2);
         if (c == 0) {
-          if (!compareCellValues(c1.getCellValue(), c2.getCellValue())) {
+          if (!c1.getCellValue().compare(c2.getCellValue())) {
             isDiff = true;
             diffCallback.reportDiffCell(c1, c2);
           }
@@ -103,28 +103,6 @@ public class SpreadSheetDiffer {
     diffCallback.reportWorkbooksDiffer(isDiff, WORKBOOK1, WORKBOOK2);
 
     return isDiff ? 1 : 0;
-  }
-
-  private static boolean compareCellValues(Object val1, Object val2) {
-    if ((val1 == null) && (val2 == null)) {
-      return true;
-    } else if (((val1 == null) && (val2 != null)) || ((val1 != null) && (val2 == null))) {
-      return false;
-    } else {
-      if (val1.equals(val2)) {
-        return true;
-      } else {
-        if ((val1 instanceof Double) && (val2 instanceof Double)) {
-          if (Flags.DIFF_NUMERIC_PRECISION == null) {
-            return false;
-          } else {
-            return Math.abs((Double) val1 - (Double) val2) < Flags.DIFF_NUMERIC_PRECISION;
-          }
-        } else {
-          return false;
-        }
-      }
-    }
   }
 
   private static boolean isDevNull(File file) {

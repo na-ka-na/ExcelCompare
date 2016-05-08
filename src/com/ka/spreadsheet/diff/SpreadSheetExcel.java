@@ -163,26 +163,30 @@ class CellExcel implements ICell {
   }
 
   @Override
-  public Object getValue() {
+  public CellValue getValue() {
+    boolean hasFormula = false;
+    String formula = null;
+    Object value = null;
     int cellType = cell.getCellType();
     if (cellType == Cell.CELL_TYPE_FORMULA) {
-      if (!Flags.DIFF_IGNORE_FORMULAS) {
-        return cell.getCellFormula();
-      } else {
-        cellType = cell.getCachedFormulaResultType();
-      }
+      hasFormula = true;
+      formula = cell.getCellFormula();
+      cellType = cell.getCachedFormulaResultType();
     }
     switch (cellType) {
       case Cell.CELL_TYPE_NUMERIC:
-        return cell.getNumericCellValue();
+        value = cell.getNumericCellValue();
+        break;
       case Cell.CELL_TYPE_BOOLEAN:
-        return cell.getBooleanCellValue();
-      case Cell.CELL_TYPE_BLANK:
-      case Cell.CELL_TYPE_STRING:
-        return cell.getStringCellValue();
+        value = cell.getBooleanCellValue();
+        break;
       case Cell.CELL_TYPE_ERROR:
-        return String.valueOf(cell.getErrorCellValue());
+        value = String.valueOf(cell.getErrorCellValue());
+        break;
+      default:
+        value = cell.getStringCellValue();
+        break;
     }
-    return cell.getStringCellValue();
+    return new CellValue(hasFormula, formula, value);
   }
 }

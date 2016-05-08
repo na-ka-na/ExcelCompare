@@ -152,19 +152,26 @@ class CellOdf implements ICell {
   }
 
   @Override
-  public Object getValue() {
-    String formula = cell.getFormula();
-    if ((formula != null) && !Flags.DIFF_IGNORE_FORMULAS) {
-      return formula;
+  public CellValue getValue() {
+    boolean hasFormula = false;
+    String formula = null;
+    Object value = null;
+    if (cell.getFormula() != null) {
+      hasFormula = true;
+      formula = cell.getFormula();
     }
     String valueType = cell.getValueType();
     if (valueType != null) {
       if (valueType.equals("float")) {
-        return cell.getDoubleValue();
+        value = cell.getDoubleValue();
       } else if (valueType.equals("boolean")) {
-        return cell.getBooleanValue();
+        value = cell.getBooleanValue();
+      } else {
+        value = cell.getStringValue();
       }
+    } else {
+      value = cell.getStringValue();
     }
-    return cell.getStringValue();
+    return new CellValue(hasFormula, formula, value);
   }
 }
