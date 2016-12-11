@@ -32,6 +32,13 @@ Just [download](https://github.com/na-ka-na/ExcelCompare/releases) the zip file.
 
 Extract it anywhere (and optionally you add the bin folder to PATH).
 
+### macOS
+
+[Homebrew](http://brew.sh/) makes it easy to install ExcelCompare:
+
+    $ brew update
+    $ brew install excel-compare
+
 ## Usage
 
     $ excel_cmp <diff-flags> <file1> <file2> [--ignore1 <sheet-ignore-spec> ..] [--ignore2 <sheet-ignore-spec> ..]
