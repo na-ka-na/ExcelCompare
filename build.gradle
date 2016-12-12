@@ -1,0 +1,21 @@
+allprojects {
+    group 'com.ka'
+    version '0.0.1-SNAPSHOT'
+}
+
+apply plugin: "java"
+apply plugin: "application"
+
+sourceCompatibility = 1.6
+
+distributions {
+    main {
+        mainClassName = "com.ka.spreadsheet.diff.SpreadSheetDiffer"
+    }
+}
+
+dependencies {
+    compile("org.apache.poi:poi-ooxml:3.12")
+    compile("org.apache.odftoolkit:simple-odf:0.8.1-incubating")
+    compile("com.google.code.findbugs:jsr305:3.0.1")
+}
