@@ -1,3 +1,8 @@
+Version 0.6.1 to 0.6.0
+--------------------
+1. Removed Xmx flag from excel_cmp, so tool doesn't fail with big workbooks.
+2. Print cell position if we're unable to read it.
+
 Version 0.6.0 to 0.5.1
 --------------------
 1. Added a --diff_ignore_formulas flag.
