@@ -5,4 +5,4 @@ if [ -L $0 ];then
 else
   dir=`dirname $0`
 fi
-java -ea -Xmx512m -cp "$dir/dist/*" com.ka.spreadsheet.diff.SpreadSheetDiffer "$@"
+java -ea -cp "$dir/dist/*" com.ka.spreadsheet.diff.SpreadSheetDiffer "$@"
