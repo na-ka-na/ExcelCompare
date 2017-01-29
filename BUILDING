@@ -4,6 +4,9 @@ Release
 # On Mac install jdk6 from https://support.apple.com/kb/DL1572, then export JAVA_HOME=$(/usr/libexec/java_home -v 1.6)
 # Install ant with ivy, or mkdir ivy/, download ivy.jar into ivy/
 # ant deps
+# Inc version in cfg/build.properties
 > ant clean test
 > ant clean build
 # This will create the release zip
+# Upload relase to github
+# Update brew formula https://github.com/Homebrew/homebrew-core/blob/master/Formula/excel-compare.rb
