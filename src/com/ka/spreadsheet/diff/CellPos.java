@@ -36,7 +36,11 @@ public class CellPos {
   }
 
   public CellValue getCellValue() {
-    return cell.getValue();
+    try {
+      return cell.getValue();
+    } catch (Exception e) {
+      throw new RuntimeException("Error reading Cell at " + getCellPosition() + ": " + e.getMessage(), e);
+    }
   }
 
   /**
