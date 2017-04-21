@@ -1,3 +1,7 @@
+repositories {
+    mavenCentral()
+}
+
 allprojects {
     group 'com.ka'
     version '0.0.1-SNAPSHOT'
