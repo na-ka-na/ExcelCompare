@@ -1,8 +1,21 @@
 #!/usr/bin/env sh
 
-if [ -L $0 ];then
-  dir=`readlink -f $0|xargs dirname`
-else
-  dir=`dirname $0`
-fi
-java -ea -cp "$dir/dist/*" com.ka.spreadsheet.diff.SpreadSheetDiffer "$@"
+unamekernel="$(uname -s)"
+
+case "${unamekernel}" in
+  MINGW64*)
+    dir="$(readlink -f "$0"|xargs -d '\n' dirname)"
+    jarfiles="$(find "${dir}/dist" -name *.jar | tr '\n' ':')"
+    jarfiles=${jarfiles%?}
+    ;;
+  *)
+    if [ -L $0 ];then
+      dir=`readlink -f $0|xargs dirname`
+    else
+      dir=`dirname $0`
+    fi
+    jarfiles="$dir/dist/*"
+    ;;
+esac
+
+java -ea -cp "$jarfiles" com.ka.spreadsheet.diff.SpreadSheetDiffer "$@"
