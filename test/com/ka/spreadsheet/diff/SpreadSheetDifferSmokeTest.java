@@ -129,7 +129,13 @@ public class SpreadSheetDifferSmokeTest {
   }
 
   private static File resultFile(String resultFile) {
-    return new File(isWindows ? ("win_" + resultFile) : resultFile);
+    if (isWindows) {
+      File tempFile = new File(resultFile);
+      String dir = tempFile.getParent();
+      String filename = "win_" + tempFile.getName();
+      resultFile = dir + File.separator + filename;
+    }
+    return new File(resultFile);
   }
 
   public static void testDiff(String testName, String[] args, @Nullable File expectedOutFile,
