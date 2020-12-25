@@ -13,7 +13,7 @@ public class TestUtils {
   /**
    * Treat nulls as empty files.
    */
-  public static void verifyFileContentsSame(@Nullable File actual, @Nullable File expected)
+  public static void verifyFileContentsSame(String stream, @Nullable File actual, @Nullable File expected)
       throws IOException {
     LinkedList<String> actualLines =
         actual == null ? new LinkedList<String>() : readFileIntoLines(actual);
@@ -25,7 +25,7 @@ public class TestUtils {
       if ((actualLine == null) && (expectedLine == null)) {
         break;
       }
-      assertEquals("Line " + lineNum + " differs", actualLine, expectedLine);
+      assertEquals(stream + " line " + lineNum + " differs", actualLine, expectedLine);
     }
   }
 
