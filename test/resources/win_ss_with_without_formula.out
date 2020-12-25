@@ -1,8 +1,9 @@
 DIFF  Cell at     Sheet1!A1 => '2.0' v/s '1+1'
+DIFF  Cell at     Sheet1!B2 => 'ab' v/s 'CONCATENATE("a","b")'
 ----------------- DIFF -------------------
 Sheets: [Sheet1]
-Rows: [1]
-Cols: [A]
+Rows: [1, 2]
+Cols: [A, B]
 ----------------- EXTRA WB1 -------------------
 Sheets: []
 Rows: []
