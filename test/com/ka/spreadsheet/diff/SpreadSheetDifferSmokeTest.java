@@ -125,6 +125,20 @@ public class SpreadSheetDifferSmokeTest {
                       "test/resources/ss_with_formula.xlsx"},
         resultFile("test/resources/ss_with_without_formula.out"),
         null);
+    testDiff(
+        "Identical xlsx files with Unified Diff output format",
+        new String[] {"--diff_format=unified",
+                      "test/resources/ss1.xlsx",
+                      "test/resources/ss1.xlsx"},
+        resultFile("test/resources/ss1_xlsx_ss1_xlsx.out_udiff"),
+        null);
+    testDiff(
+        "Diff xlsx files with Unified Diff output format",
+        new String[] {"--diff_format=unified",
+                      "test/resources/ss1.xlsx",
+                      "test/resources/ss2.xlsx"},
+        resultFile("test/resources/ss1_xlsx_ss2_xlsx.out_udiff"),
+        null);
     System.err.println("All tests pass");
   }
 

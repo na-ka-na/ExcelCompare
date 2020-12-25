@@ -22,8 +22,16 @@ public class CellPos {
     return ROW_INTERNAL_TO_USER(cell.getRowIndex());
   }
 
+  public int getRowIndex() {
+    return cell.getRowIndex();
+  }
+
   public String getColumn() {
     return COL_INTERNAL_TO_USER(cell.getColumnIndex());
+  }
+
+  public int getColumnIndex() {
+    return cell.getColumnIndex();
   }
 
   public String getCellPosition() {
