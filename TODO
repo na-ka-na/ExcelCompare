@@ -1,5 +1,4 @@
 * Shifting cells, columns, rows
-* Option to diff formatting
 * Logging levels (quite mode)
 * Better display of results
 * Provide API (callbacks)

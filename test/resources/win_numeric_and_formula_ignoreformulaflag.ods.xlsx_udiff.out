@@ -1,0 +1,7 @@
+--- test\resources\numeric_and_formula.ods!Sheet1
++++ test\resources\numeric_and_formula.xlsx!Sheet1
+@@ -A1,B1 +A1,B1 @@
+-
+-
++
++

@@ -22,7 +22,18 @@ public class SpreadSheetDiffer {
     int ret = -1;
     try {
       if (Flags.parseFlags(args)) {
-        ret = doDiff(new StdoutSpreadSheetDiffCallback());
+        SpreadSheetDiffCallback formatter;
+        switch (Flags.DIFF_FORMAT) {
+          case EXCEL_CMP:
+            formatter = new StdoutSpreadSheetDiffCallback();
+            break;
+          case UNIFIED:
+            formatter = new UnifiedDiffSpreadSheetDiffCallback();
+            break;
+          default:
+            throw new IllegalArgumentException("Unknown diff formatter");
+        }
+        ret = doDiff(formatter);
       }
     } catch (Exception e) {
       if (Flags.DEBUG) {
