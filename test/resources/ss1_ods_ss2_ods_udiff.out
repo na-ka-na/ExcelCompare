@@ -1,5 +1,5 @@
---- test\resources\ss1.ods!Sheet1
-+++ test\resources\ss2.ods!Sheet1
+--- test/resources/ss1.ods!Sheet1
++++ test/resources/ss2.ods!Sheet1
 @@ -A2,B2 +A2,B2 @@
 -
 -b2
