@@ -1,0 +1,8 @@
+--- test\resources\ss1.xlsx!Sheet1
++++ test\resources\ss2.xlsx!Sheet1
+@@ -A2,B2 +A2,B2 @@
++a2
++b2
+@@ -C3 +C3 @@
+-c3
++c33

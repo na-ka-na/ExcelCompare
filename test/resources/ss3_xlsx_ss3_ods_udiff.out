@@ -1,0 +1,11 @@
+--- test\resources\ss3.xlsx!Sheet1
++++ test\resources\ss3.ods!Sheet1
+@@ -A1 +A1 @@
+-a1
++a11
+@@ -B2 +B2 @@
+-b2
++b22
+@@ -C3 +C3 @@
+-c3
++c33

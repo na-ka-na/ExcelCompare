@@ -9,19 +9,27 @@ public class Flags {
   private static final String DIFF_NUMERIC_PRECISION_FLAG = "--diff_numeric_precision";
   // no value, default absent
   private static final String DIFF_IGNORE_FORMULAS_FLAG = "--diff_ignore_formulas";
+  private static final String DIFF_FORMAT_FLAG = "--diff_format";
 
   public static boolean DEBUG;
   public static Double DIFF_NUMERIC_PRECISION;
   public static boolean DIFF_IGNORE_FORMULAS;
+  public static DiffFormatter DIFF_FORMAT;
   public static File WORKBOOK1;
   public static File WORKBOOK2;
   public static WorkbookIgnores WORKBOOK_IGNORES1;
   public static WorkbookIgnores WORKBOOK_IGNORES2;
 
+  public enum DiffFormatter {
+    EXCEL_CMP,
+    UNIFIED
+  }
+
   public static boolean parseFlags(String[] args) {
     DEBUG = false;
     DIFF_NUMERIC_PRECISION = null;
     DIFF_IGNORE_FORMULAS = false;
+    DIFF_FORMAT = DiffFormatter.EXCEL_CMP;
     WORKBOOK1 = null;
     WORKBOOK2 = null;
     WORKBOOK_IGNORES1 = null;
@@ -39,6 +47,11 @@ public class Flags {
     idx = findFlag(DIFF_IGNORE_FORMULAS_FLAG, args);
     if (idx != -1) {
       DIFF_IGNORE_FORMULAS = true;
+      args = removeFlag(idx, args);
+    }
+    idx = findFlag(DIFF_FORMAT_FLAG, args);
+    if (idx != -1) {
+      DIFF_FORMAT = parseFormatFlagValue(idx, args);
       args = removeFlag(idx, args);
     }
     if (args.length < 2) {
@@ -63,6 +76,17 @@ public class Flags {
   private static double parseDoubleFlagValue(int flagIdx, String[] args) {
     String flag = args[flagIdx];
     return Double.parseDouble(flag.substring(flag.indexOf("=") + 1, flag.length()));
+  }
+
+  private static DiffFormatter parseFormatFlagValue(int flagIdx, String[] args) {
+    String flag = args[flagIdx];
+    String value = flag.substring(flag.indexOf("=") + 1, flag.length());
+    try {
+      return DiffFormatter.valueOf(value.toUpperCase());
+    } catch (IllegalArgumentException e) {
+      System.out.println(usage());
+      throw new IllegalArgumentException("Illegal " + DIFF_FORMAT_FLAG + " value: " + value);
+    }
   }
 
   private static String[] removeFlag(int flagIdx, String[] args) {
@@ -97,6 +121,8 @@ public class Flags {
         + "       * --diff_numeric_precision: by default numbers are diffed with double precision, to change that specify this flag as --diff_numeric_precision=0.0001"
         + "\n"
         + "       * --diff_ignore_formulas: by default for cells with formula, formula is compared instead of the evaluated value. Use this flag to compare evaluated value instead"
+        + "\n"
+        + "       * --diff_format: by default output is in 'excel_cmp' format, use --diff_format=unified to output in Unified Diff format instead"
         + "\n"
         + "\n"
         + "Sheet Ignore Spec:  <sheet-name>:<row-ignore-spec>:<column-ignore-spec>:<cell-ignore-spec>"
