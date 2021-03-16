@@ -224,17 +224,23 @@ Excel files xxx.xlsx and yyy.xlsx match
 ## Unified Diff output format
 * Diffs are reported in the "unified diff" style, with no surrounding context (_i.e._, a la `diff -U0`).
 * Each sheet containing a diff or an extra cell begins with a header as follows:
+<pre>
 		--<FileName1>!<SheetName>
 		++<FileName2>!<SheetName>
+</pre>
 * Each row containing a diff or an extra cell begins with a line that identifies the specific cell range as follows:
+<pre>
 		@@ <Row><ColumnM>,<Row><ColumnN> <Row><ColumnM>,<Row><ColumnN>  @@
+</pre>
 * Each diff or extra cell is reported as follows:
+<pre>
 		-<ColumnMValue1>
 		-...
 		-<ColumnNValue1>
 		+<ColumnMValue2>
 		+...
 		+<ColumnNValue2>
+</pre>
 * There is no summary, and if there are no diffs and no extra cells, the output is empty.
 
 ### Examples
