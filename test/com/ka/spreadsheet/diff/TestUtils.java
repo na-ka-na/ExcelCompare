@@ -51,7 +51,7 @@ public class TestUtils {
   public static void assertEquals(String messagePrefix, Object actual, Object expected) {
     if (((actual == null && expected != null) || (actual != null && expected == null))
         || !actual.equals(expected)) {
-      throw new AssertionError(messagePrefix + "\nactual: " + actual + "\nexpected: " + expected);
+      throw new AssertionError(messagePrefix + "\nactual  : " + actual + "\nexpected: " + expected);
     }
   }
 
