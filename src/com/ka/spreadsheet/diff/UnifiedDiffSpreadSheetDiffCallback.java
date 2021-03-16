@@ -27,12 +27,11 @@ import static com.ka.spreadsheet.diff.SpreadSheetUtils.CELL_INTERNAL_TO_USER;
 public class UnifiedDiffSpreadSheetDiffCallback implements SpreadSheetDiffCallback {
 
   private final String lineSeparator = System.getProperty("line.separator");
-  private List<DiffCell> diffCells = new ArrayList<DiffCell>();
-
   private String file1;
   private String file2;
-
   private CellPos previousCell = null;
+  private DiffCell prevDiffCell = new DiffCell("", -2, -2, null, null);
+  private List<DiffCell> currentCellBlock = new ArrayList<DiffCell>();
 
   @Override
   public void init(String file1, String file2) {
@@ -42,49 +41,11 @@ public class UnifiedDiffSpreadSheetDiffCallback implements SpreadSheetDiffCallba
 
   @Override
   public void finish() {
+    printAndEmptyCellBlock();
   }
 
   @Override
   public void reportWorkbooksDiffer(boolean differ) {
-    String sheetName = "";
-    int row = -1;
-    int col = -1;
-    List<DiffCell> cellBlock = null;
-    for (DiffCell diffCell : diffCells) {
-     if (!diffCell.sheetName.equals(sheetName)) {
-        // New sheet, finish the active row (if any) and start the new sheet.
-        if (cellBlock != null) {
-          printRow(cellBlock);
-        }
-        sheetName = diffCell.sheetName;
-        System.out.println("--- " + file1 + "!" + sheetName);
-        System.out.println("+++ " + file2 + "!" + sheetName);
-        cellBlock = null;
-        row = -1;
-      }
-      if (diffCell.rowIndex != row) {
-        // New row, finish the active row (if any) and start the new row.
-        if (cellBlock != null) {
-          printRow(cellBlock);
-        }
-        cellBlock = null;
-        row = diffCell.rowIndex;
-        col = -1;
-      }
-      if (diffCell.colIndex != col) {
-        // New cell-block, finish the active cell-block (if any) and start a new cell-block.
-        if (cellBlock != null) {
-          printRow(cellBlock);
-        }
-        cellBlock = new ArrayList<DiffCell>();
-      }
-      // Add this cell to the active cell-block.
-      cellBlock.add(diffCell);
-      col = diffCell.colIndex + 1;
-    }
-    if (cellBlock != null) {
-      printRow(cellBlock);
-    }
   }
 
   @Override
@@ -98,7 +59,7 @@ public class UnifiedDiffSpreadSheetDiffCallback implements SpreadSheetDiffCallba
       "Cell-ordering contract violated.  Previous=" + previousCell.getCellPosition()
       + ", current=" + c.getCellPosition();
     previousCell = c;
-    diffCells.add(new DiffCell(
+    accumulateAndMaybePrint(new DiffCell(
       c.getSheetName(),
       c.getRowIndex(),
       c.getColumnIndex(),
@@ -116,7 +77,7 @@ public class UnifiedDiffSpreadSheetDiffCallback implements SpreadSheetDiffCallba
       "Cell-ordering contract violated.  Previous=" + previousCell.getCellPosition()
       + ", current=" + c1.getCellPosition();
     previousCell = c1;
-    diffCells.add(new DiffCell(
+    accumulateAndMaybePrint(new DiffCell(
       c1.getSheetName(),
       c1.getRowIndex(),
       c1.getColumnIndex(),
@@ -125,40 +86,71 @@ public class UnifiedDiffSpreadSheetDiffCallback implements SpreadSheetDiffCallba
     ));
   }
 
-  // TODO: Make this handle multiple rows, maybe.  What would that output look like?  This might be a bad idea.
-  private void printRow(List<DiffCell> rowCells) {
-    StringBuilder sheet1Lines = new StringBuilder();
-    StringBuilder sheet2Lines = new StringBuilder();
-    String cellRange = CELL_INTERNAL_TO_USER(rowCells.get(0).rowIndex, rowCells.get(0).colIndex);
-    if (rowCells.size() > 1) {
-        cellRange = cellRange + "," +
-          CELL_INTERNAL_TO_USER(rowCells.get(0).rowIndex, rowCells.get(rowCells.size()-1).colIndex);
+  private void accumulateAndMaybePrint(DiffCell diffCell) {
+    if (!isSameSheet(prevDiffCell, diffCell)) {
+      printAndEmptyCellBlock();
+      System.out.println("--- " + file1 + "!" + diffCell.sheetName);
+      System.out.println("+++ " + file2 + "!" + diffCell.sheetName);
     }
-    System.out.println("@@ -" + cellRange + " +" + cellRange + " @@");
-    int prevCol = -1;
-    for (DiffCell rowCell : rowCells) {
-        if (rowCells.get(0).rowIndex != rowCell.rowIndex) {
-            throw new RuntimeException("printRow() only supports one row at a time.");
-        }
-        if (prevCol != -1 && prevCol != (rowCell.colIndex -1 )) {
-            throw new RuntimeException("printRow() only supports a contiguous range of cells at a time.");
-        }
-      sheet1Lines.append("-");
-      sheet2Lines.append("+");
-      if (rowCell.c1Value != null) {
-        sheet1Lines.append(rowCell.c1Value);
-      }
-      if (rowCell.c2Value != null) {
-        sheet2Lines.append(rowCell.c2Value);
-      }
-      sheet1Lines.append(lineSeparator);
-      sheet2Lines.append(lineSeparator);
+    if (!isSameRow(prevDiffCell, diffCell)) {
+      printAndEmptyCellBlock();
     }
-    System.out.print(sheet1Lines.toString());
-    System.out.print(sheet2Lines.toString());
+    if (!isSameCellBlock(prevDiffCell, diffCell)) {
+      printAndEmptyCellBlock();
+    }
+    currentCellBlock.add(diffCell);
+    prevDiffCell = diffCell;
   }
 
-  private class DiffCell implements Comparable<DiffCell> {
+  private boolean isSameSheet(DiffCell c1, DiffCell c2) {
+    assert c1 != null && c2 != null;
+    return c1.sheetName.equals(c2.sheetName);
+  }
+
+  private boolean isSameRow(DiffCell c1, DiffCell c2) {
+    assert c1 != null && c2 != null;
+    return c1.rowIndex == c2.rowIndex;
+  }
+
+  private boolean isSameCellBlock(DiffCell c1, DiffCell c2) {
+    assert c1 != null && c2 != null;
+    return c1.colIndex == (c2.colIndex - 1);
+  }
+
+  // TODO: Make this handle multiple rows, maybe.  What would that output look like?  This might be a bad idea.
+  private void printAndEmptyCellBlock() {
+    assert currentCellBlock != null;
+    if (currentCellBlock.size() > 0) {
+      StringBuilder sheet1Lines = new StringBuilder();
+      StringBuilder sheet2Lines = new StringBuilder();
+      String cellRange = CELL_INTERNAL_TO_USER(currentCellBlock.get(0).rowIndex, currentCellBlock.get(0).colIndex);
+      if (currentCellBlock.size() > 1) {
+          cellRange = cellRange + "," +
+            CELL_INTERNAL_TO_USER(currentCellBlock.get(0).rowIndex, currentCellBlock.get(currentCellBlock.size()-1).colIndex);
+      }
+      System.out.println("@@ -" + cellRange + " +" + cellRange + " @@");
+      int prevCol = -1;
+      for (DiffCell rowCell : currentCellBlock) {
+        assert currentCellBlock.get(0).rowIndex == rowCell.rowIndex : "printAndEmptyCellBlock() only supports one row at a time.";
+        assert prevCol == -1 || prevCol == (rowCell.colIndex -1 ) : "printAndEmptyCellBlock() only supports a contiguous range of cells at a time.";
+        sheet1Lines.append("-");
+        sheet2Lines.append("+");
+        if (rowCell.c1Value != null) {
+          sheet1Lines.append(rowCell.c1Value);
+        }
+        if (rowCell.c2Value != null) {
+          sheet2Lines.append(rowCell.c2Value);
+        }
+        sheet1Lines.append(lineSeparator);
+        sheet2Lines.append(lineSeparator);
+      }
+      System.out.print(sheet1Lines.toString());
+      System.out.print(sheet2Lines.toString());
+      }
+    currentCellBlock = new ArrayList<DiffCell>();
+  }
+
+  private class DiffCell {
     String sheetName;
     int rowIndex;
     int colIndex;
@@ -171,13 +163,6 @@ public class UnifiedDiffSpreadSheetDiffCallback implements SpreadSheetDiffCallba
       colIndex = _colIndex;
       c1Value = _c1Value;
       c2Value = _c2Value;
-    }
-    
-    public int compareTo(DiffCell other) {
-        int sheetComparison = sheetName.compareTo(other.sheetName);
-        return sheetComparison != 0 ? sheetComparison
-                : rowIndex != other.rowIndex ? rowIndex - other.rowIndex
-                : colIndex - other.colIndex;
     }
   }
 }
