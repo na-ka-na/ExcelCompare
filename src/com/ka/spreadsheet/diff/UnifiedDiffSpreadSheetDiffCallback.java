@@ -29,18 +29,27 @@ public class UnifiedDiffSpreadSheetDiffCallback implements SpreadSheetDiffCallba
   private final String lineSeparator = System.getProperty("line.separator");
   private List<DiffCell> diffCells = new ArrayList<DiffCell>();
 
-  // This formatter requires that each cell in the pair of workbooks will be processed in worksheet-row-column order.
-  // SpreadSheetDiffer.java does that, but it's not a contract.  If that changes some day, set this to true to resort
-  // the list of diffs/extras before formatting them.
-  private static final boolean diffCellsIsUnsorted = false;
+  private String file1;
+  private String file2;
+
+  private CellPos previousCell = null;
 
   @Override
-  public void reportWorkbooksDiffer(boolean differ, File file1, File file2) {
+  public void init(String file1, String file2) {
+    this.file1 = file1;
+    this.file2 = file2;
+  }
+
+  @Override
+  public void finish() {
+  }
+
+  @Override
+  public void reportWorkbooksDiffer(boolean differ) {
     String sheetName = "";
     int row = -1;
     int col = -1;
     List<DiffCell> cellBlock = null;
-    sortList(diffCells);
     for (DiffCell diffCell : diffCells) {
      if (!diffCell.sheetName.equals(sheetName)) {
         // New sheet, finish the active row (if any) and start the new sheet.
@@ -85,6 +94,10 @@ public class UnifiedDiffSpreadSheetDiffCallback implements SpreadSheetDiffCallba
 
   @Override
   public void reportExtraCell(boolean inFirstSpreadSheet, CellPos c) {
+    assert previousCell == null || c.compareCellPositions(previousCell) >= 0 :
+      "Cell-ordering contract violated.  Previous=" + previousCell.getCellPosition()
+      + ", current=" + c.getCellPosition();
+    previousCell = c;
     diffCells.add(new DiffCell(
       c.getSheetName(),
       c.getRowIndex(),
@@ -96,9 +109,13 @@ public class UnifiedDiffSpreadSheetDiffCallback implements SpreadSheetDiffCallba
 
   @Override
   public void reportDiffCell(CellPos c1, CellPos c2) {
-    if (c1.getRowIndex() != c1.getRowIndex() || c2.getColumnIndex() != c2.getColumnIndex()) {
-        throw new RuntimeException("Invalid cell comparison: WB1=" + c1.getCellPosition() + ", WB2=" + c2.getCellPosition());
-    }
+    assert (c1.getRowIndex() == c2.getRowIndex())
+      && (c1.getColumnIndex() == c2.getColumnIndex()) : "Cells are not at the same position. Cell 1="
+      + c1.getCellPosition() + ", cell 2=" + c2.getCellPosition();
+    assert previousCell == null || c1.compareCellPositions(previousCell) >= 0 :
+      "Cell-ordering contract violated.  Previous=" + previousCell.getCellPosition()
+      + ", current=" + c1.getCellPosition();
+    previousCell = c1;
     diffCells.add(new DiffCell(
       c1.getSheetName(),
       c1.getRowIndex(),
@@ -127,11 +144,11 @@ public class UnifiedDiffSpreadSheetDiffCallback implements SpreadSheetDiffCallba
             throw new RuntimeException("printRow() only supports a contiguous range of cells at a time.");
         }
       sheet1Lines.append("-");
-	  sheet2Lines.append("+");
-	  if (rowCell.c1Value != null) {
+      sheet2Lines.append("+");
+      if (rowCell.c1Value != null) {
         sheet1Lines.append(rowCell.c1Value);
       }
-	  if (rowCell.c2Value != null) {
+      if (rowCell.c2Value != null) {
         sheet2Lines.append(rowCell.c2Value);
       }
       sheet1Lines.append(lineSeparator);
@@ -139,12 +156,6 @@ public class UnifiedDiffSpreadSheetDiffCallback implements SpreadSheetDiffCallba
     }
     System.out.print(sheet1Lines.toString());
     System.out.print(sheet2Lines.toString());
-  }
-
-  private void sortList(List<DiffCell> inputCells) {
-    if (diffCellsIsUnsorted) {
-		  java.util.Collections.sort(inputCells);
-    }
   }
 
   private class DiffCell implements Comparable<DiffCell> {

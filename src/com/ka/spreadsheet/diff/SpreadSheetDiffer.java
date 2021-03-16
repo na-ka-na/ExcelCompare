@@ -58,6 +58,7 @@ public class SpreadSheetDiffer {
     ISpreadSheetIterator ssi2 = isDevNull(WORKBOOK2) ?
         emptySpreadSheetIterator() : new SpreadSheetIterator(ss2, Flags.WORKBOOK_IGNORES2);
 
+    diffCallback.init(WORKBOOK1.getPath(), WORKBOOK2.getPath());
     boolean isDiff = false;
     CellPos c1 = null, c2 = null;
     while (true) {
@@ -111,7 +112,8 @@ public class SpreadSheetDiffer {
       diffCallback.reportMacroOnlyIn(hasMacro1);
     }
 
-    diffCallback.reportWorkbooksDiffer(isDiff, WORKBOOK1, WORKBOOK2);
+    diffCallback.reportWorkbooksDiffer(isDiff);
+	diffCallback.finish();
 
     return isDiff ? 1 : 0;
   }

@@ -71,6 +71,7 @@
     <target name="test" depends="compile, test-compile">
         <java classname="${test.mainclass}" fork="true" failonerror="true">
             <jvmarg value="-Xmx4g" />
+            <jvmarg value="-ea" />
             <classpath refid="lib.classpath" />
             <classpath>
                 <pathelement location="${class.dir}" />
