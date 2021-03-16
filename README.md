@@ -227,16 +227,14 @@ Excel files xxx.xlsx and yyy.xlsx match
 		--<FileName1>!<SheetName>
 		++<FileName2>!<SheetName>
 * Each row containing a diff or an extra cell begins with a line that identifies the specific cell range as follows:
-		@@ <Cell1>,<CellN> <Cell1>,<CellN>  @@
+		@@ <Row><ColumnM>,<Row><ColumnN> <Row><ColumnM>,<Row><ColumnN>  @@
 * Each diff or extra cell is reported as follows:
-		-<Cell1Value1>
+		-<ColumnMValue1>
 		-...
-		-<Cell2Value1>
-		-<CellnValue1>
-		+<Cell1Value2>
-		-...
-		+<Cell2Value2>
-		+<CellnValue2>
+		-<ColumnNValue1>
+		+<ColumnMValue2>
+		+...
+		+<ColumnNValue2>
 * There is no summary, and if there are no diffs and no extra cells, the output is empty.
 
 ### Examples
@@ -288,7 +286,6 @@ Excel files xxx.xlsx and yyy.xlsx match
 </pre>
 
 * No diff
-<pre>
 <pre>
 > excel_cmp --diff-format=unified xxx.xlsx yyy.xlsx --ignore1 Sheet1 Sheet2 Sheet3 --ignore2 Sheet1 Sheet2 Sheet3
 </pre>
