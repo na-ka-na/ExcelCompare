@@ -53,6 +53,7 @@ public class CellPos {
 
   /**
    * Compare positions in {Sheet, Row, Column} order.
+   * Returns -/0/+ as in Comparable.compareTo().
    */
   public int compareCellPositions(CellPos o) {
     int c = sheet.getSheetIndex() - o.sheet.getSheetIndex();
