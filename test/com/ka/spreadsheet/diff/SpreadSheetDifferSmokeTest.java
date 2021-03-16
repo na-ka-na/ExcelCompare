@@ -173,8 +173,8 @@ public class SpreadSheetDifferSmokeTest {
         out.close();
     }
     assertTrue(testCompleted);
-    verifyFileContentsSame(errFile, expectedErrFile);
-    verifyFileContentsSame(outFile, expectedOutFile);
+    verifyFileContentsSame("Err", errFile, expectedErrFile);
+    verifyFileContentsSame("Out", outFile, expectedOutFile);
     System.err.println("passed");
   }
 }
