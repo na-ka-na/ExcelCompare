@@ -155,7 +155,8 @@ Notes:
 ### Examples
 
 * Diffs in cells and extra cells
-<pre>
+
+```
 > excel_cmp xxx.xlsx yyy.xlsx
 DIFF  Cell at     Sheet1!A1 => 'a' v/s 'aa'
 EXTRA Cell in WB1 Sheet1!B1 => 'cc'
@@ -178,10 +179,11 @@ Rows: [10, 1]
 Cols: [J, A]
 -----------------------------------------
 Excel files xxx.xlsx and yyy.xlsx differ
-</pre>
+```
 
 * Only extra cells
-<pre>
+
+```
 excel_cmp xxx.xlsx yyy.xlsx --ignore1 Sheet1 --ignore2 Sheet1
 EXTRA Cell in WB1 Sheet2!A1 => 'abc'
 EXTRA Cell in WB2 Sheet3!A1 => 'haha'
@@ -199,11 +201,11 @@ Rows: [1]
 Cols: [A]
 -----------------------------------------
 Excel files xxx.xlsx and yyy.xlsx differ
-</pre>
-
+```
 
 * No diff
-<pre>
+
+```
 excel_cmp xxx.xlsx yyy.xlsx --ignore1 Sheet1 Sheet2 Sheet3 --ignore2 Sheet1 Sheet2 Sheet3
 ----------------- DIFF -------------------
 Sheets: []
@@ -219,34 +221,30 @@ Rows: []
 Cols: []
 -----------------------------------------
 Excel files xxx.xlsx and yyy.xlsx match
-</pre>
+```
 
 ## Unified Diff output format
 * Diffs are reported in the "unified diff" style, with no surrounding context (_i.e._, a la `diff -U0`).
 * Each sheet containing a diff or an extra cell begins with a header as follows:
-<pre>
 		--<FileName1>!<SheetName>
 		++<FileName2>!<SheetName>
-</pre>
-* Each row containing a diff or an extra cell begins with a line that identifies the specific cell range as follows:
-<pre>
+* Each row containing a diff or an extra cell begins with a line that identifies a contiguous series of cells in the row as follows:
 		@@ <Row><ColumnM>,<Row><ColumnN> <Row><ColumnM>,<Row><ColumnN>  @@
-</pre>
 * Each diff or extra cell is reported as follows:
-<pre>
 		-<ColumnMValue1>
 		-...
 		-<ColumnNValue1>
 		+<ColumnMValue2>
 		+...
 		+<ColumnNValue2>
-</pre>
+* If there are multiple series of diff or extra cells, the row header and cell data will be repeated, with the column numbers idetifying the start and end of each series.
 * There is no summary, and if there are no diffs and no extra cells, the output is empty.
 
 ### Examples
 
 * Diffs in cells and extra cells
-<pre>
+
+```diff
 > excel_cmp --diff-format=unified xxx.xlsx yyy.xlsx
 --- xxx.xlsx!Sheet1
 +++ yyy.xlsx!Sheet1
@@ -274,10 +272,11 @@ Excel files xxx.xlsx and yyy.xlsx match
 @@ A1 A1 @@
 -
 +haha
-</pre>
+```
 
 * Only extra cells
-<pre>
+
+```diff
 > excel_cmp --diff-format=unified xxx.xlsx yyy.xlsx --ignore1 Sheet1 --ignore2 Sheet1
 --- xxx.xlsx!Sheet2
 +++ yyy.xlsx!Sheet2
@@ -289,9 +288,10 @@ Excel files xxx.xlsx and yyy.xlsx match
 @@ A1 A1 @@
 -
 +haha
-</pre>
+```
 
 * No diff
-<pre>
+
+```diff
 > excel_cmp --diff-format=unified xxx.xlsx yyy.xlsx --ignore1 Sheet1 Sheet2 Sheet3 --ignore2 Sheet1 Sheet2 Sheet3
-</pre>
+```
