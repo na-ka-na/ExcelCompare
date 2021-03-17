@@ -12,9 +12,10 @@ public class SpreadSheetDifferSmokeTest {
 
   private static final File TEMP_DIR = new File("test/resources");
 
-  private static final boolean isWindows = "\\".equals(System.getProperty("file.separator"));
+  private static final boolean isWindows = (System.getProperty("os.name").startsWith("Windows"));
 
   public static void main(String[] args) throws Exception {
+    System.out.println("Using " + (isWindows ? "" : "non-") + "Windows expected results files.");
     testDiff(
         "Identical xlsx files",
         new String[] {"test/resources/ss1.xlsx", "test/resources/ss1.xlsx"},
@@ -205,9 +206,14 @@ public class SpreadSheetDifferSmokeTest {
   }
 
   private static File resultFile(String resultFile) {
-    return new File(isWindows ? ("win_" + resultFile) : resultFile);
+    if (isWindows) {
+      File tempFile = new File(resultFile);
+      String dir = tempFile.getParent();
+      String filename = "win_" + tempFile.getName();
+      resultFile = dir + File.separator + filename;
+    }
+    return new File(resultFile);
   }
-
   public static void testDiff(String testName, String[] args, @Nullable File expectedOutFile,
       @Nullable File expectedErrFile) throws Exception {
     System.err.print(testName + "... ");
@@ -243,8 +249,8 @@ public class SpreadSheetDifferSmokeTest {
         out.close();
     }
     assertTrue(testCompleted);
-    verifyFileContentsSame(errFile, expectedErrFile);
-    verifyFileContentsSame(outFile, expectedOutFile);
+    verifyFileContentsSame("Err", errFile, expectedErrFile);
+    verifyFileContentsSame("Out", outFile, expectedOutFile);
     System.err.println("passed");
   }
 }
