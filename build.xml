@@ -8,6 +8,7 @@
     
     <target name="init" depends="load-props">
         <mkdir dir="${class.dir}" />
+        <mkdir dir="${class.dir}/test" />
         <mkdir dir="${installer.staging}"/>
     </target>
     
@@ -49,30 +50,45 @@
                 
     <!-- test-compile -->
     <target name="test-compile" depends="resolve-classpath">
-        <javac includeantruntime="false" srcdir="${test.dir}" destdir="${class.dir}"
+        <javac includeantruntime="false" srcdir="${test.dir}" destdir="${class.dir}/test"
             debug="true" debuglevel="lines,vars,source" fork="true">
             <compilerarg line="-J-Xmx4g" />
             <classpath refid="lib.classpath" />
             <classpath>
+                <pathelement location="${class.dir}" />
                 <pathelement location="${testcfg.dir}" />
             </classpath>
         </javac>
-        <copy todir="${class.dir}">
+        <copy todir="${class.dir}/test">
             <fileset dir="${test.dir}">
                 <include name="**/*.txt" />
                 <include name="**/*.tokens" />
                 <include name="**/*.list" />
                 <include name="**/*.xls*" />
+                <include name="**/*.ods" />
             </fileset>
         </copy>
+        <!-- Build the Windows-style test-expected-results files from the Mac/Linux ones -->
+        <copy todir="${class.dir}/test/resources/">
+            <fileset dir="${test.dir}/resources/">
+                <include name="**/*.err" />
+                <include name="**/*.out" />
+            </fileset>
+            <globmapper from="*" to="win_*" />
+            <filterchain>
+                <fixcrlf eol="crlf" srcdir="${class.dir}/test/resources/" destdir="${class.dir}/test/resources/" includes="win_*" fixlast="false" />
+                <replacestring from="test/resources/" to="test\resources\" />
+            </filterchain>
+        </copy>
     </target>
-    
+
     <!-- tests go here -->
     <target name="test" depends="compile, test-compile">
-        <java classname="${test.mainclass}" fork="true" failonerror="true">
+        <java classname="${test.mainclass}" fork="true" failonerror="true" dir="${class.dir}">
             <jvmarg value="-Xmx4g" />
             <classpath refid="lib.classpath" />
             <classpath>
+				<pathelement location="${class.dir}/test" />
                 <pathelement location="${class.dir}" />
                 <pathelement location="${testcfg.dir}" />
             </classpath>
@@ -81,11 +97,7 @@
 
     <!-- create .jar -->
     <target name="jar" depends="compile">
-        <jar jarfile="${basedir}/${installer.staging}/bin/dist/${jar.name}" basedir="${class.dir}">
-            <fileset dir="${cfg.dir}">
-                <include name="*" />
-                <exclude name="test" />
-            </fileset>
+        <jar jarfile="${basedir}/${installer.staging}/bin/dist/${jar.name}" basedir="${class.dir}" excludes="test/**, ${cfg.dir}/test/**">
             <manifest>
                 <attribute name="VERSION" value="${full.version}" />
                 <!-- attribute name="SVN-Revision" value="${svnversion}" / -->
@@ -93,7 +105,7 @@
             </manifest>
         </jar>
     </target>
-	
+
 	<target name="java-version-check">
 	    <fail message="Java version: ${ant.java.version}, required at most 1.6.">
 	    	<condition>
@@ -106,9 +118,9 @@
 	    	</condition>
 	    </fail>
 	</target>
-	
+
     <target name="build" depends="java-version-check, jar, copy-jars, copy-readme, copy-legal, write-binaries, create-zip"/>
-	
+
 	<target name="create-zip" depends="load-props">
 		<zip destfile="${project.name}-${full.version}.zip" basedir="${installer.staging}" />
 	</target>
