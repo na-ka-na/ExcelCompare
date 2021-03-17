@@ -56,7 +56,7 @@ public class StdoutSpreadSheetDiffCallback implements SpreadSheetDiffCallback {
 
   @Override
   public void reportExtraCell(boolean inFirstSpreadSheet, CellPos c) {
-    assert previousCell == null || c.compareCellPositions(previousCell) >= 0 :
+    assert previousCell == null || c.compareCellPositions(previousCell) > 0 :
       "Cell-ordering contract violated.  Previous=" + previousCell.getCellPosition()
       + ", current=" + c.getCellPosition();
     previousCell = c;
@@ -78,7 +78,7 @@ public class StdoutSpreadSheetDiffCallback implements SpreadSheetDiffCallback {
     assert (c1.getRowIndex() == c2.getRowIndex())
       && (c1.getColumnIndex() == c2.getColumnIndex()) : "Cells are not at the same position. Cell 1="
       + c1.getCellPosition() + ", cell 2=" + c2.getCellPosition();
-    assert previousCell == null || c1.compareCellPositions(previousCell) >= 0 :
+    assert previousCell == null || c1.compareCellPositions(previousCell) > 0 :
       "Cell-ordering contract violated.  Previous=" + previousCell.getCellPosition()
       + ", current=" + c1.getCellPosition();
     previousCell = c1;
