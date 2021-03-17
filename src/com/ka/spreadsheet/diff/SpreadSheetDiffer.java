@@ -113,7 +113,7 @@ public class SpreadSheetDiffer {
     }
 
     diffCallback.reportWorkbooksDiffer(isDiff);
-	diffCallback.finish();
+    diffCallback.finish();
 
     return isDiff ? 1 : 0;
   }
