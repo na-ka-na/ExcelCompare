@@ -1,8 +1,0 @@
---- test\resources\ss_without_formula.xlsx!Sheet1
-+++ test\resources\ss_with_formula.xlsx!Sheet1
-@@ -A1 +A1 @@
--2.0
-+1+1
-@@ -B2 +B2 @@
--ab
-+CONCATENATE("a","b")
