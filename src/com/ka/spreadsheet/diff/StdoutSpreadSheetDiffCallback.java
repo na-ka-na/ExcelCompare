@@ -4,7 +4,7 @@ import java.io.File;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
-public class StdoutSpreadSheetDiffCallback implements SpreadSheetDiffCallback {
+public class StdoutSpreadSheetDiffCallback extends SpreadSheetDiffCallbackBase {
 
   private final Set<Object> sheets = new LinkedHashSet<Object>();
   private final Set<Object> rows = new LinkedHashSet<Object>();
@@ -25,20 +25,16 @@ public class StdoutSpreadSheetDiffCallback implements SpreadSheetDiffCallback {
   private String file1;
   private String file2;
 
-  private CellPos previousCell = null;
-
   @Override
   public void init(String file1, String file2) {
+    super.init(file1, file2);
     this.file1 = file1;
     this.file2 = file2;
   }
 
   @Override
-  public void finish() {
-  }
-
-  @Override
   public void reportWorkbooksDiffer(boolean differ) {
+    super.reportWorkbooksDiffer(differ);
     reportSummary("DIFF", sheets, rows, cols, macros);
     reportSummary("EXTRA WB1", sheets1, rows1, cols1, macros1);
     reportSummary("EXTRA WB2", sheets2, rows2, cols2, macros2);
@@ -49,6 +45,7 @@ public class StdoutSpreadSheetDiffCallback implements SpreadSheetDiffCallback {
 
   @Override
   public void reportMacroOnlyIn(boolean inFirstSpreadSheet) {
+    super.reportMacroOnlyIn(inFirstSpreadSheet);
     String name = "unknown";
     (inFirstSpreadSheet ? macros1 : macros2).add(name);
     System.out.println("EXTRA macro name: " + name + " found only in " + wb(inFirstSpreadSheet));
@@ -56,10 +53,7 @@ public class StdoutSpreadSheetDiffCallback implements SpreadSheetDiffCallback {
 
   @Override
   public void reportExtraCell(boolean inFirstSpreadSheet, CellPos c) {
-    assert previousCell == null || c.compareCellPositions(previousCell) > 0 :
-      "Cell-ordering contract violated.  Previous=" + previousCell.getCellPosition()
-      + ", current=" + c.getCellPosition();
-    previousCell = c;
+    super.reportExtraCell(inFirstSpreadSheet, c);
     if (inFirstSpreadSheet) {
       sheets1.add(c.getSheetName());
       rows1.add(c.getRow());
@@ -75,13 +69,7 @@ public class StdoutSpreadSheetDiffCallback implements SpreadSheetDiffCallback {
 
   @Override
   public void reportDiffCell(CellPos c1, CellPos c2) {
-    assert (c1.getRowIndex() == c2.getRowIndex())
-      && (c1.getColumnIndex() == c2.getColumnIndex()) : "Cells are not at the same position. Cell 1="
-      + c1.getCellPosition() + ", cell 2=" + c2.getCellPosition();
-    assert previousCell == null || c1.compareCellPositions(previousCell) > 0 :
-      "Cell-ordering contract violated.  Previous=" + previousCell.getCellPosition()
-      + ", current=" + c1.getCellPosition();
-    previousCell = c1;
+    super.reportDiffCell(c1, c2);
     sheets.add(c1.getSheetName());
     rows.add(c1.getRow());
     cols.add(c1.getColumn());
