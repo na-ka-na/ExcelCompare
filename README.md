@@ -15,7 +15,7 @@ This software is distributed under the [MIT](http://www.opensource.org/licenses/
 * Works with xls, xlsx, xlsm, ods. You may compare any of these with each other.
 * Compares only cell "contents". Formatting, macros are currently ignored.
 * Using --ignore1 & --ignore2 (both optional) you may tell the diff to skip any number of sheets / rows / columns / cells.
-* Other flags to control diffing (see below for description of these): --diff_numeric_precision, --diff_ignore_formulas.
+* Other flags to control diffing (see below for description of these): --diff_numeric_precision, --diff_ignore_formulas, --diff_format.
 
 Report bugs / issues / requests [here](https://github.com/na-ka-na/ExcelCompare/issues)
 
@@ -54,6 +54,7 @@ Notes:
 
 * --diff_numeric_precision: by default numbers are diffed with double precision, to change that specify this flag as --diff_numeric_precision=0.0001
 * --diff_ignore_formulas: by default for cells with formula, formula is compared instead of the evaluated value. Use this flag to compare evaluated value instead
+* --diff_format: by default output is in 'excel_cmp' format, use --diff_format=unified to output in Unified Diff format instead
 
 ### Sheet Ignore Spec
     <sheet-name>:<row-ignore-spec>:<column-ignore-spec>:<cell-ignore-spec>
@@ -125,7 +126,7 @@ Notes:
 
         excel_cmp 1.xlsx 2.xlsx --ignore1 ::A --ignore2 ::A
 
-## Output format
+## Native ("excel_cmp") Output format
 * Each diff or extra cell is reported per line as follows
 
         DIFF  Cell at      <Cell> => <Value1> v/s <Value2>
@@ -154,7 +155,8 @@ Notes:
 ### Examples
 
 * Diffs in cells and extra cells
-<pre>
+
+```
 > excel_cmp xxx.xlsx yyy.xlsx
 DIFF  Cell at     Sheet1!A1 => 'a' v/s 'aa'
 EXTRA Cell in WB1 Sheet1!B1 => 'cc'
@@ -177,10 +179,11 @@ Rows: [10, 1]
 Cols: [J, A]
 -----------------------------------------
 Excel files xxx.xlsx and yyy.xlsx differ
-</pre>
+```
 
 * Only extra cells
-<pre>
+
+```
 excel_cmp xxx.xlsx yyy.xlsx --ignore1 Sheet1 --ignore2 Sheet1
 EXTRA Cell in WB1 Sheet2!A1 => 'abc'
 EXTRA Cell in WB2 Sheet3!A1 => 'haha'
@@ -198,11 +201,11 @@ Rows: [1]
 Cols: [A]
 -----------------------------------------
 Excel files xxx.xlsx and yyy.xlsx differ
-</pre>
-
+```
 
 * No diff
-<pre>
+
+```
 excel_cmp xxx.xlsx yyy.xlsx --ignore1 Sheet1 Sheet2 Sheet3 --ignore2 Sheet1 Sheet2 Sheet3
 ----------------- DIFF -------------------
 Sheets: []
@@ -218,4 +221,77 @@ Rows: []
 Cols: []
 -----------------------------------------
 Excel files xxx.xlsx and yyy.xlsx match
-</pre>
+```
+
+## Unified Diff output format
+* Diffs are reported in the "unified diff" style, with no surrounding context (_i.e._, a la `diff -U0`).
+* Each sheet containing a diff or an extra cell begins with a header as follows:
+		--<FileName1>!<SheetName>
+		++<FileName2>!<SheetName>
+* Each row containing a diff or an extra cell begins with a line that identifies a contiguous series of cells in the row as follows:
+		@@ <Row><ColumnM>,<Row><ColumnN> <Row><ColumnM>,<Row><ColumnN>  @@
+* Each diff or extra cell is reported as follows:
+		-<ColumnMValue1>
+		-...
+		-<ColumnNValue1>
+		+<ColumnMValue2>
+		+...
+		+<ColumnNValue2>
+* If there are multiple series of diff or extra cells, the row header and cell data will be repeated, with the column numbers idetifying the start and end of each series.
+* There is no summary, and if there are no diffs and no extra cells, the output is empty.
+
+### Examples
+
+* Diffs in cells and extra cells
+
+```diff
+> excel_cmp --diff-format=unified xxx.xlsx yyy.xlsx
+--- xxx.xlsx!Sheet1
++++ yyy.xlsx!Sheet1
+@@ A1,B1 A1,B1 @@
+-a
+-cc
++aa
++
+@@ D4 D4 @@
+-4.0
++14.0
+@@ J10 J10 @@
+-
++j
+@@ K11 K11 @@
+-k
++
+--- xxx.xlsx!Sheet2
++++ yyy.xlsx!Sheet2
+@@ A1 A1 @@
+-abc
++
+--- xxx.xlsx!Sheet3
++++ yyy.xlsx!Sheet3
+@@ A1 A1 @@
+-
++haha
+```
+
+* Only extra cells
+
+```diff
+> excel_cmp --diff-format=unified xxx.xlsx yyy.xlsx --ignore1 Sheet1 --ignore2 Sheet1
+--- xxx.xlsx!Sheet2
++++ yyy.xlsx!Sheet2
+@@ A1 A1 @@
+-abc
++
+--- xxx.xlsx!Sheet3
++++ yyy.xlsx!Sheet3
+@@ A1 A1 @@
+-
++haha
+```
+
+* No diff
+
+```diff
+> excel_cmp --diff-format=unified xxx.xlsx yyy.xlsx --ignore1 Sheet1 Sheet2 Sheet3 --ignore2 Sheet1 Sheet2 Sheet3
+```

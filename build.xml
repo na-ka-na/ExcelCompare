@@ -66,6 +66,8 @@
                 <include name="**/*.list" />
                 <include name="**/*.xls*" />
                 <include name="**/*.ods" />
+                <include name="**/*.err" />
+                <include name="**/*.out" />
             </fileset>
         </copy>
         <!-- Build the Windows-style test-expected-results files from the Mac/Linux ones -->
@@ -86,9 +88,10 @@
     <target name="test" depends="compile, test-compile">
         <java classname="${test.mainclass}" fork="true" failonerror="true" dir="${class.dir}">
             <jvmarg value="-Xmx4g" />
+            <jvmarg value="-ea" /> <!-- Required for correctness of tests. -->
             <classpath refid="lib.classpath" />
             <classpath>
-				<pathelement location="${class.dir}/test" />
+                <pathelement location="${class.dir}/test" />
                 <pathelement location="${class.dir}" />
                 <pathelement location="${testcfg.dir}" />
             </classpath>

@@ -22,7 +22,18 @@ public class SpreadSheetDiffer {
     int ret = -1;
     try {
       if (Flags.parseFlags(args)) {
-        ret = doDiff(new StdoutSpreadSheetDiffCallback());
+        SpreadSheetDiffCallback formatter;
+        switch (Flags.DIFF_FORMAT) {
+          case EXCEL_CMP:
+            formatter = new StdoutSpreadSheetDiffCallback();
+            break;
+          case UNIFIED:
+            formatter = new UnifiedDiffSpreadSheetDiffCallback();
+            break;
+          default:
+            throw new IllegalArgumentException("Unknown diff formatter");
+        }
+        ret = doDiff(formatter);
       }
     } catch (Exception e) {
       if (Flags.DEBUG) {
@@ -47,6 +58,7 @@ public class SpreadSheetDiffer {
     ISpreadSheetIterator ssi2 = isDevNull(WORKBOOK2) ?
         emptySpreadSheetIterator() : new SpreadSheetIterator(ss2, Flags.WORKBOOK_IGNORES2);
 
+    diffCallback.init(WORKBOOK1.getPath(), WORKBOOK2.getPath());
     boolean isDiff = false;
     CellPos c1 = null, c2 = null;
     while (true) {
@@ -100,7 +112,8 @@ public class SpreadSheetDiffer {
       diffCallback.reportMacroOnlyIn(hasMacro1);
     }
 
-    diffCallback.reportWorkbooksDiffer(isDiff, WORKBOOK1, WORKBOOK2);
+    diffCallback.reportWorkbooksDiffer(isDiff);
+    diffCallback.finish();
 
     return isDiff ? 1 : 0;
   }

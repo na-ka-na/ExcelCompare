@@ -126,6 +126,82 @@ public class SpreadSheetDifferSmokeTest {
                       "test/resources/ss_with_formula.xlsx"},
         resultFile("test/resources/ss_with_without_formula.out"),
         null);
+    testDiff(
+        "Identical xlsx files with Unified Diff output format",
+        new String[] {"--diff_format=unified",
+                      "test/resources/ss1.xlsx",
+                      "test/resources/ss1.xlsx"},
+        resultFile("test/resources/ss1_xlsx_ss1_xlsx_udiff.out"),
+        null);
+    testDiff(
+        "Diff xlsx files with Unified Diff output format",
+        new String[] {"--diff_format=unified",
+                      "test/resources/ss1.xlsx",
+                      "test/resources/ss2.xlsx"},
+        resultFile("test/resources/ss1_xlsx_ss2_xlsx_udiff.out"),
+        null);
+     testDiff(
+        "Diff ods files with Unified Diff output format",
+        new String[] {"--diff_format=unified",
+                      "test/resources/ss1.ods", "test/resources/ss2.ods"},
+        resultFile("test/resources/ss1_ods_ss2_ods_udiff.out"),
+        null);
+    testDiff(
+        "Diff xlsx and ods with Unified Diff output format",
+        new String[] {"--diff_format=unified",
+                      "test/resources/ss3.xlsx", "test/resources/ss3.ods"},
+        resultFile("test/resources/ss3_xlsx_ss3_ods_udiff.out"),
+        null);
+    testDiff(
+        "Diff ods and xlsx with Unified Diff output format",
+        new String[] {"--diff_format=unified",
+                      "test/resources/ss3.ods", "test/resources/ss3.xlsx"},
+        resultFile("test/resources/ss3_ods_ss3_xlsx_udiff.out"),
+        null);
+    testDiff(
+        "Numeric and formula xls xlsx with Unified Diff output format",
+        new String[] {"--diff_format=unified",
+                      "test/resources/numeric_and_formula.xls",
+            "test/resources/numeric_and_formula.xlsx"},
+        resultFile("test/resources/numeric_and_formula.xls.xlsx_udiff.out"),
+        null);
+    testDiff(
+        "Numeric and formula xls odf with Unified Diff output format",
+        new String[] {"--diff_format=unified",
+                      "test/resources/numeric_and_formula.xls",
+            "test/resources/numeric_and_formula.ods"},
+        resultFile("test/resources/numeric_and_formula.xls.ods_udiff.out"),
+        null);
+    testDiff(
+        "Numeric and formula odf xlsx with flag with Unified Diff output format",
+        new String[] {"--diff_format=unified",
+                      "--diff_ignore_formulas",
+                      "test/resources/numeric_and_formula.ods",
+                      "test/resources/numeric_and_formula.xlsx"},
+        resultFile("test/resources/numeric_and_formula_ignoreformulaflag.ods.xlsx_udiff.out"),
+        null);
+    testDiff(
+        "Ignore single cell with Unified Diff output format",
+        new String[] {"--diff_format=unified",
+                      "test/resources/ss3.xlsx", "test/resources/ss3.ods",
+            "--ignore1", "Sheet1:2:B", "--ignore2", "Sheet1:2:B"},
+        resultFile("test/resources/ss3_xlsx_ss3_ignore2B_ods_udiff.out"),
+        null);
+    testDiff(
+        "With without formula with flag with Unified Diff output format",
+        new String[] {"--diff_format=unified",
+                      "--diff_ignore_formulas",
+                      "test/resources/ss_without_formula.xlsx",
+                      "test/resources/ss_with_formula.xlsx"},
+        resultFile("test/resources/ss_with_without_formula_ignoreformulaflag_udiff.out"),
+        null);
+    testDiff(
+        "With without formula without flag with Unified Diff output format",
+        new String[] {"--diff_format=unified",
+                      "test/resources/ss_without_formula.xlsx",
+                      "test/resources/ss_with_formula.xlsx"},
+        resultFile("test/resources/ss_with_without_formula_udiff.out"),
+        null);
     System.err.println("All tests pass");
   }
 
