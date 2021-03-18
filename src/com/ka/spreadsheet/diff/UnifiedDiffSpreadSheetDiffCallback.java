@@ -24,41 +24,36 @@ import static com.ka.spreadsheet.diff.SpreadSheetUtils.CELL_INTERNAL_TO_USER;
 //        +++ file_2_name!sheet_2_name
 //        ...
 // Each cell data line is always present, even if the data is empty (thus just "-" or "+).
-public class UnifiedDiffSpreadSheetDiffCallback implements SpreadSheetDiffCallback {
+public class UnifiedDiffSpreadSheetDiffCallback extends SpreadSheetDiffCallbackBase {
 
   private final String lineSeparator = System.getProperty("line.separator");
   private String file1;
   private String file2;
-  private CellPos previousCell = null;
   private DiffCell prevDiffCell = new DiffCell("", -2, -2, null, null);
   private List<DiffCell> currentCellBlock = new ArrayList<DiffCell>();
 
   @Override
   public void init(String file1, String file2) {
+    super.init(file1, file2);
     this.file1 = file1;
     this.file2 = file2;
   }
 
   @Override
   public void finish() {
+    super.finish();
     printAndEmptyCellBlock();
   }
 
   @Override
-  public void reportWorkbooksDiffer(boolean differ) {
-  }
-
-  @Override
   public void reportMacroOnlyIn(boolean inFirstSpreadSheet) {
+    super.reportMacroOnlyIn(inFirstSpreadSheet);
     System.out.println("Unified diff format does not support macros, however WB" + (inFirstSpreadSheet ? "1" : "2") + " contains at least one macro that is not in the other workbook.");
   }
 
   @Override
   public void reportExtraCell(boolean inFirstSpreadSheet, CellPos c) {
-    assert previousCell == null || c.compareCellPositions(previousCell) > 0 :
-      "Cell-ordering contract violated.  Previous=" + previousCell.getCellPosition()
-      + ", current=" + c.getCellPosition();
-    previousCell = c;
+    super.reportExtraCell(inFirstSpreadSheet, c);
     accumulateAndMaybePrint(new DiffCell(
       c.getSheetName(),
       c.getRowIndex(),
@@ -70,13 +65,7 @@ public class UnifiedDiffSpreadSheetDiffCallback implements SpreadSheetDiffCallba
 
   @Override
   public void reportDiffCell(CellPos c1, CellPos c2) {
-    assert (c1.getRowIndex() == c2.getRowIndex())
-      && (c1.getColumnIndex() == c2.getColumnIndex()) : "Cells are not at the same position. Cell 1="
-      + c1.getCellPosition() + ", cell 2=" + c2.getCellPosition();
-    assert previousCell == null || c1.compareCellPositions(previousCell) > 0 :
-      "Cell-ordering contract violated.  Previous=" + previousCell.getCellPosition()
-      + ", current=" + c1.getCellPosition();
-    previousCell = c1;
+    super.reportDiffCell(c1, c2);
     accumulateAndMaybePrint(new DiffCell(
       c1.getSheetName(),
       c1.getRowIndex(),
@@ -103,23 +92,19 @@ public class UnifiedDiffSpreadSheetDiffCallback implements SpreadSheetDiffCallba
   }
 
   private boolean isSameSheet(DiffCell c1, DiffCell c2) {
-    assert c1 != null && c2 != null;
     return c1.sheetName.equals(c2.sheetName);
   }
 
   private boolean isSameRow(DiffCell c1, DiffCell c2) {
-    assert c1 != null && c2 != null;
     return c1.rowIndex == c2.rowIndex;
   }
 
   private boolean isSameCellBlock(DiffCell c1, DiffCell c2) {
-    assert c1 != null && c2 != null;
     return c1.colIndex == (c2.colIndex - 1);
   }
 
   // TODO: Make this handle multiple rows, maybe.  What would that output look like?  This might be a bad idea.
   private void printAndEmptyCellBlock() {
-    assert currentCellBlock != null;
     if (currentCellBlock.size() > 0) {
       StringBuilder sheet1Lines = new StringBuilder();
       StringBuilder sheet2Lines = new StringBuilder();
