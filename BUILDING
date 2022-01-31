@@ -1,12 +1,6 @@
 Release
 -------
-# Note: set jdk to <= 6 before following
-# On Mac install jdk6 from https://support.apple.com/kb/DL1572, then export JAVA_HOME=$(/usr/libexec/java_home -v 1.6)
-# Install ant with ivy, or mkdir ivy/, download ivy.jar into ivy/
-# ant deps
-# Inc version in cfg/build.properties
-> ant clean test
-> ant clean build
-# This will create the release zip
-# Upload relase to github
-# Update brew formula https://github.com/Homebrew/homebrew-core/blob/master/Formula/excel-compare.rb
+Install Visual Studio Code with Gradle extension
+Change version in build.gradle file
+Run "gradle distZip" command in trerminal or select "distZip" under Tasks->distribution commands to get the Release zip file. Zip file will be in build/distributions folder.
+Upload release to github

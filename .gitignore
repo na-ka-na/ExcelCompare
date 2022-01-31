@@ -4,3 +4,5 @@ classes
 install_stage
 ivy
 ExcelCompare*.zip
+build
+.gradle 
