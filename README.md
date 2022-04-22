@@ -30,7 +30,7 @@ Report bugs / issues / requests [here](https://github.com/na-ka-na/ExcelCompare/
 
 Just [download](https://github.com/na-ka-na/ExcelCompare/releases) the zip file.
 
-Extract it anywhere (and optionally you add the bin folder to PATH).
+Extract it anywhere (and optionally you add the extracted folder to PATH).
 
 ### macOS
 

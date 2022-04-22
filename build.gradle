@@ -22,6 +22,7 @@ distributions {
             from ('legal') {
                 into 'legal'
             }
+            from 'scripts'
         }
     }
 }

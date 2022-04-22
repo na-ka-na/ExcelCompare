@@ -5,7 +5,7 @@ unamekernel="$(uname -s)"
 case "${unamekernel}" in
   MINGW64*)
     dir="$(readlink -f "$0"|xargs -d '\n' dirname)"
-    jarfiles="$(find "${dir}/dist" -name *.jar | tr '\n' ':')"
+    jarfiles="$(find "${dir}/lib" -name *.jar | tr '\n' ':')"
     jarfiles=${jarfiles%?}
     ;;
   *)
@@ -14,7 +14,7 @@ case "${unamekernel}" in
     else
       dir=`dirname $0`
     fi
-    jarfiles="$dir/dist/*"
+    jarfiles="$dir/lib/*"
     ;;
 esac
 
