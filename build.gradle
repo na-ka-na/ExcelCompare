@@ -17,7 +17,19 @@ compileJava {
 distributions {
     main {
         mainClassName = "com.ka.spreadsheet.diff.SpreadSheetDiffer"
+        contents {
+            from 'README.md'
+            from ('legal') {
+                into 'legal'
+            }
+        }
     }
+}
+
+dependencies {
+    implementation("org.apache.poi:poi-ooxml:3.12")
+    implementation("org.apache.odftoolkit:simple-odf:0.8.2-incubating")
+    implementation("com.google.code.findbugs:jsr305:3.0.2")
 }
 
 sourceSets {
@@ -39,10 +51,4 @@ tasks.register('smokeTest', JavaExec) {
     classpath = sourceSets.test.runtimeClasspath
     main = 'com.ka.spreadsheet.diff.SpreadSheetDifferSmokeTest'
     shouldRunAfter test
-}
-
-dependencies {
-    implementation("org.apache.poi:poi-ooxml:3.12")
-    implementation("org.apache.odftoolkit:simple-odf:0.8.2-incubating")
-    implementation("com.google.code.findbugs:jsr305:3.0.2")
 }
