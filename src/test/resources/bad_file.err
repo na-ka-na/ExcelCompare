@@ -1,1 +1,1 @@
-Diff failed: Failed to read as excel file: test/resources/badfile.txt
+Diff failed: Failed to read as excel file: src/test/resources/badfile.txt

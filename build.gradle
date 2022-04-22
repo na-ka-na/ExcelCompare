@@ -10,7 +10,9 @@ allprojects {
 apply plugin: "java"
 apply plugin: "application"
 
-sourceCompatibility = 1.6
+compileJava {
+    options.release = 8
+}
 
 distributions {
     main {
@@ -18,8 +20,29 @@ distributions {
     }
 }
 
+sourceSets {
+    test {
+        compileClasspath += sourceSets.main.output
+        runtimeClasspath += sourceSets.main.output
+    }
+}
+
+configurations {
+    testImplementation.extendsFrom implementation
+    testRuntimeOnly.extendsFrom runtimeOnly
+}
+
+tasks.register('smokeTest', JavaExec) {
+    description = 'Runs Smoke tests'
+    group = 'verification'
+
+    classpath = sourceSets.test.runtimeClasspath
+    main = 'com.ka.spreadsheet.diff.SpreadSheetDifferSmokeTest'
+    shouldRunAfter test
+}
+
 dependencies {
     implementation("org.apache.poi:poi-ooxml:3.12")
-    implementation("org.apache.odftoolkit:simple-odf:0.8.1-incubating")
-    implementation("com.google.code.findbugs:jsr305:3.0.1")
-} 
+    implementation("org.apache.odftoolkit:simple-odf:0.8.2-incubating")
+    implementation("com.google.code.findbugs:jsr305:3.0.2")
+}

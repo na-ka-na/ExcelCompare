@@ -11,4 +11,4 @@ Sheets: []
 Rows: []
 Cols: []
 -----------------------------------------
-Excel files test/resources/MultiSheet.xls and test/resources/MultiSheet.xls match
+Excel files src/test/resources/MultiSheet.xls and src/test/resources/MultiSheet.xls match

@@ -13,4 +13,4 @@ Sheets: []
 Rows: []
 Cols: []
 -----------------------------------------
-Excel files test/resources/numeric_and_formula.ods and test/resources/numeric_and_formula.xlsx differ
+Excel files src/test/resources/numeric_and_formula.ods and src/test/resources/numeric_and_formula.xlsx differ

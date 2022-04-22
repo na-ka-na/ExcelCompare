@@ -11,4 +11,4 @@ Sheets: []
 Rows: []
 Cols: []
 -----------------------------------------
-Excel files test/resources/ss_without_formula.xlsx and test/resources/ss_with_formula.xlsx match
+Excel files src/test/resources/ss_without_formula.xlsx and src/test/resources/ss_with_formula.xlsx match

@@ -14,4 +14,4 @@ Sheets: [Sheet1]
 Rows: [2]
 Cols: [A]
 -----------------------------------------
-Excel files test/resources/ss1.xlsx and test/resources/ss2.xlsx differ
+Excel files src/test/resources/ss1.xlsx and src/test/resources/ss2.xlsx differ

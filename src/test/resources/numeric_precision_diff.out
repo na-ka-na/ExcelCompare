@@ -12,4 +12,4 @@ Sheets: []
 Rows: []
 Cols: []
 -----------------------------------------
-Excel files test/resources/ss1_numeric_precision.xlsx and test/resources/ss2_numeric_precision.xlsx differ
+Excel files src/test/resources/ss1_numeric_precision.xlsx and src/test/resources/ss2_numeric_precision.xlsx differ

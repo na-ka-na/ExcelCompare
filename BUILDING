@@ -1,6 +1,6 @@
 Release
 -------
-Install Visual Studio Code with Gradle extension
 Change version in build.gradle file
-Run "gradle distZip" command in trerminal or select "distZip" under Tasks->distribution commands to get the Release zip file. Zip file will be in build/distributions folder.
+Run "gradle smokeTest" to run all the tests
+Run "gradle distZip". Zip file will be in build/distributions folder
 Upload release to github

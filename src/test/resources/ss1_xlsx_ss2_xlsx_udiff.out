@@ -1,5 +1,5 @@
---- test/resources/ss1.xlsx!Sheet1
-+++ test/resources/ss2.xlsx!Sheet1
+--- src/test/resources/ss1.xlsx!Sheet1
++++ src/test/resources/ss2.xlsx!Sheet1
 @@ -A2,B2 +A2,B2 @@
 -
 -b2

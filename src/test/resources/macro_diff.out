@@ -13,4 +13,4 @@ Sheets: []
 Rows: []
 Cols: []
 -----------------------------------------
-Excel files test/resources/ss_with_macro.xlsm and test/resources/ss_without_macro.xlsx differ
+Excel files src/test/resources/ss_with_macro.xlsm and src/test/resources/ss_without_macro.xlsx differ

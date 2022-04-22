@@ -14,4 +14,4 @@ Sheets: [Sheet1]
 Rows: [1, 2, 3]
 Cols: [A, B, C]
 -----------------------------------------
-Excel files /dev/null and test/resources/ss1.xlsx differ
+Excel files /dev/null and src/test/resources/ss1.xlsx differ
