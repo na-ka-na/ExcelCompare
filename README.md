@@ -23,7 +23,7 @@ Report bugs / issues / requests [here](https://github.com/na-ka-na/ExcelCompare/
 
 ### Prerequisites
 
-* Requires Java 1.6 or higher.
+* Requires Java 1.8 or higher.
 * Assumes Java is added to PATH (to check open a cmd and run java -version)
 * No other platform specific requirements
 * A shell script and a bat script are packaged
