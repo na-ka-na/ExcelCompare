@@ -1,3 +1,9 @@
+Version 0.7.0 to 0.6.1
+--------------------
+1. Change minimum requirements from Java 6 to Java 8
+2. Support for MINGW64
+3. Add support for unified diff format (use --diff_format=unified, see README)
+
 Version 0.6.1 to 0.6.0
 --------------------
 1. Removed Xmx flag from excel_cmp, so tool doesn't fail with big workbooks.
