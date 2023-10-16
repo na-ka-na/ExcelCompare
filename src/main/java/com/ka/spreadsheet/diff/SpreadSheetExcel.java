@@ -1,15 +1,11 @@
 package com.ka.spreadsheet.diff;
 
-import java.util.Iterator;
+import org.apache.poi.ooxml.POIXMLDocumentPart;
+import org.apache.poi.ss.usermodel.*;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 import javax.annotation.Nullable;
-
-import org.apache.poi.POIXMLDocumentPart;
-import org.apache.poi.ss.usermodel.Cell;
-import org.apache.poi.ss.usermodel.Row;
-import org.apache.poi.ss.usermodel.Sheet;
-import org.apache.poi.ss.usermodel.Workbook;
-import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import java.util.Iterator;
 
 public class SpreadSheetExcel implements ISpreadSheet {
 
@@ -50,10 +46,12 @@ public class SpreadSheetExcel implements ISpreadSheet {
   public Boolean hasMacro() {
     if (workbook instanceof XSSFWorkbook) {
       for (POIXMLDocumentPart p : ((XSSFWorkbook) workbook).getRelations()) {
-        if ((p.getPackageRelationship() != null)
-            && (p.getPackageRelationship().getTargetURI() != null)
-            && (p.getPackageRelationship().getTargetURI().toString().contains("vbaProject"))) {
-          return true;
+        for (POIXMLDocumentPart.RelationPart part: p.getRelationParts()) {
+          if ((part.getRelationship() != null)
+                  && (part.getRelationship().getTargetURI() != null)
+                  && (part.getRelationship().getTargetURI().toString().contains("vbaProject"))) {
+            return true;
+          }
         }
       }
       return false;
@@ -167,20 +165,20 @@ class CellExcel implements ICell {
     boolean hasFormula = false;
     String formula = null;
     Object value = null;
-    int cellType = cell.getCellType();
-    if (cellType == Cell.CELL_TYPE_FORMULA) {
+    CellType cellType = cell.getCellType();
+    if (cellType == CellType.FORMULA) {
       hasFormula = true;
       formula = cell.getCellFormula();
       cellType = cell.getCachedFormulaResultType();
     }
     switch (cellType) {
-      case Cell.CELL_TYPE_NUMERIC:
+      case NUMERIC:
         value = cell.getNumericCellValue();
         break;
-      case Cell.CELL_TYPE_BOOLEAN:
+      case BOOLEAN:
         value = cell.getBooleanCellValue();
         break;
-      case Cell.CELL_TYPE_ERROR:
+      case ERROR:
         value = String.valueOf(cell.getErrorCellValue());
         break;
       default:
